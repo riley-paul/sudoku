@@ -1,13 +1,20 @@
+import useStore from "@/lib/store.ts";
 import React from "react";
 
 type Props = {
-  value: number;
+  row: number;
+  col: number;
 };
 
 const Square: React.FC<Props> = (props) => {
-  const { value } = props;
+  const { row, col } = props;
+  const { grid } = useStore();
 
-  return <div>{value}</div>;
+  return (
+    <div className="flex items-center justify-center border text-xl">
+      {grid[row][col]}
+    </div>
+  );
 };
 
 export default Square;

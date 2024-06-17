@@ -1,12 +1,13 @@
-import { Button } from "@/components/ui/button.tsx";
+import Grid from "@/components/grid.tsx";
+import Options from "@/components/options.tsx";
 import { createFileRoute } from "@tanstack/react-router";
-import { toast } from "sonner";
 
 const component: React.FC = () => {
   return (
-    <Button variant="secondary" onClick={() => toast.success("World")}>
-      Hello
-    </Button>
+    <div className="flex flex-col gap-4">
+      <Grid />
+      <Options />
+    </div>
   );
 };
 
