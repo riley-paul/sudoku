@@ -17,13 +17,17 @@ const Square: React.FC<Props> = (props) => {
   return (
     <button
       className={cn(
-        "flex items-center justify-center border text-xl text-muted-foreground",
-        (row === 2 || row === 5) && "border-b-2 border-b-foreground",
-        (col === 2 || col === 5) && "border-r-2 border-r-foreground",
+        "flex items-center justify-center text-xl text-muted-foreground",
         row === selected?.row && "bg-muted",
         col === selected?.col && "bg-muted",
         value > 0 && "text-foreground",
         isSelected && "bg-primary text-primary-foreground",
+        value === 0 && "text-transparent",
+        col > 0 && "border-l",
+        row > 0 && "border-t",
+        col % 3 === 0 && col > 0 && "border-l-2 border-l-foreground",
+        row % 3 === 0 && row > 0 && "border-t-2 border-t-foreground",
+
       )}
       onClick={() => setSelected({ row, col })}
     >
