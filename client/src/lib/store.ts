@@ -24,6 +24,7 @@ const DEFAULT_STATE: State = {
 interface Actions {
   setGrid: (grid: number[][]) => void;
   setCell: (props: { row: number; col: number; value: number }) => void;
+  setCellSelected: (value: number) => void;
   setSelected: (selected: { row: number; col: number } | null) => void;
   getRemaining: () => number[];
   reset: () => void;
@@ -38,6 +39,16 @@ const useStore = create<State & Actions>()((set, get) => ({
       grid[row][col] = value;
       return { grid };
     }),
+  setCellSelected: (value) => {
+    const selected = get().selected;
+    if (selected) {
+      set((state) => {
+        const grid = [...state.grid];
+        grid[selected.row][selected.col] = value;
+        return { grid };
+      });
+    }
+  },
   getRemaining: () => {
     const grid = get().grid;
     const result = ZERO_TO_EIGHT.map(() => 9);

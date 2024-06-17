@@ -4,7 +4,7 @@ import { Button } from "./ui/button.tsx";
 import useStore from "@/lib/store.ts";
 
 const Options: React.FC = () => {
-  const { getRemaining } = useStore();
+  const { getRemaining, setCellSelected } = useStore();
   const remaining = getRemaining();
   return (
     <div className="flex justify-between gap-2">
@@ -14,6 +14,7 @@ const Options: React.FC = () => {
           className="h-auto w-full flex-col py-2"
           size="icon"
           key={i}
+          onClick={() => setCellSelected(i + 1)}
         >
           <div className="text-3xl text-primary">{i + 1}</div>
 
