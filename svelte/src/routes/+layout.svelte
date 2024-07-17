@@ -4,4 +4,4 @@
 </script>
 
 <Toaster />
-<slot></slot>
+<slot />

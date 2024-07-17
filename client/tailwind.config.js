@@ -1,4 +1,5 @@
 import animate from "tailwindcss-animate";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -14,6 +15,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Nunito Variable", ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

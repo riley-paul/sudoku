@@ -13,7 +13,7 @@
     --popover: 0 0% 99%;
     --popover-foreground: 0 0% 5%;
 
-    --primary: 172 66% 50%;
+    --primary: 187 92% 69%;
     --primary-foreground: 0 0% 2%;
 
     --secondary: 0 0% 95%;
@@ -34,7 +34,7 @@
 
     --radius: 0.5rem;
   }
-  
+
   .dark {
     --background: 180 7% 8%;
     --foreground: 180 9% 98%;
@@ -75,6 +75,21 @@
   }
 
   .container2 {
-    @apply mx-auto max-w-xl px-4;
+    @apply mx-auto max-w-3xl px-2 md:px-4;
+  }
+}
+
+@layer utils {
+  .wave {
+    --mask: radial-gradient(
+          7.5px at 50% calc(100% - 10.5px),
+          #000 99%,
+          #0000 101%
+        )
+        calc(50% - 12px) 0/24px 100%,
+      radial-gradient(7.5px at 50% calc(100% + 4.5px), #0000 99%, #000 101%) 50%
+        calc(100% - 6px) / 24px 100% repeat-x;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
   }
 }

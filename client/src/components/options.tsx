@@ -11,7 +11,7 @@ const Options: React.FC = () => {
       {ZERO_TO_EIGHT.map((i) => (
         <Button
           variant="secondary"
-          className="h-auto w-full flex-col py-2"
+          className="h-auto w-full flex-col py-1"
           size="icon"
           key={i}
           onClick={() => setCellSelected(i + 1)}
