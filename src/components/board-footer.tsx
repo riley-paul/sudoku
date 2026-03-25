@@ -26,7 +26,7 @@ const BoardFooter: React.FC = () => {
           N
         </div>
       </Label>
-      <Button variant="ghost" size="sm" onClick={undo}>
+      <Button variant="ghost" size="sm" className="text-xs" onClick={undo}>
         Undo
       </Button>
     </div>
