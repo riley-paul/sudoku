@@ -26,11 +26,11 @@ const setValueHotKeys = [
 ] as const;
 
 const Board: React.FC = () => {
-  const { moveSelection, selectedCellId, setValue } = useStore(
-    useShallow((s) => ({
-      moveSelection: s.moveSelection,
-      selectedCellId: s.selectedCellId,
-      setValue: s.setValue,
+  const { moveSelection, selectedCellId, setCellValue } = useStore(
+    useShallow(({ moveSelection, selectedCellId, setCellValue }) => ({
+      moveSelection,
+      selectedCellId,
+      setCellValue,
     })),
   );
 
@@ -48,7 +48,7 @@ const Board: React.FC = () => {
     setValueHotKeys.map(({ key, value }) => ({
       hotkey: key,
       callback: () => {
-        if (selectedCellId) setValue(selectedCellId, value);
+        if (selectedCellId) setCellValue(selectedCellId, value);
       },
     })),
   );
