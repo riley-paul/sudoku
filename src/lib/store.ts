@@ -28,21 +28,27 @@ type Actions = {
 
   toggleEntryMode: () => void;
 
+  addHistory: () => void;
   undo: () => void;
 };
 
 const useStore = create<State & Actions>()(
-  immer((set) => ({
+  immer((set, get) => ({
     ...initialState,
+
+    addHistory: () => {
+      set((state) => {
+        state.history = [...state.history, state.cells];
+        console.log("pushed to history", state.history.length);
+      });
+    },
 
     undo: () =>
       set((state) => {
-        console.log(state.history);
-
         if (state.history.length === 0) return state;
 
-        const previousCells = state.history[state.history.length - 1];
-        state.history = state.history.slice(0, -1);
+        const [previousCells, ...rest] = state.history.reverse();
+        state.history = rest.reverse();
         state.cells = previousCells;
       }),
 
@@ -51,7 +57,7 @@ const useStore = create<State & Actions>()(
         const cell = state.cells[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
-        state.history.push(state.cells);
+        get().addHistory();
         state.cells[id] = {
           ...cell,
           given: false,
@@ -72,7 +78,7 @@ const useStore = create<State & Actions>()(
           newNotes.add(value);
         }
 
-        state.history.push(state.cells);
+        get().addHistory();
         state.cells[id] = { ...cell, notes: Array.from(newNotes) };
       }),
 
