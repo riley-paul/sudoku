@@ -1,3 +1,4 @@
+import { current } from "immer";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { Cells } from "./types";
@@ -33,23 +34,20 @@ type Actions = {
 };
 
 const useStore = create<State & Actions>()(
-  immer((set, get) => ({
+  immer((set) => ({
     ...initialState,
 
-    addHistory: () => {
+    addHistory: () =>
       set((state) => {
-        state.history = [...state.history, state.cells];
-        console.log("pushed to history", state.history.length);
-      });
-    },
+        state.history.push(current(state.cells));
+      }),
 
     undo: () =>
       set((state) => {
-        if (state.history.length === 0) return state;
+        if (state.history.length === 0) return;
 
-        const [previousCells, ...rest] = state.history.reverse();
-        state.history = rest.reverse();
-        state.cells = previousCells;
+        const previousCells = state.history.pop();
+        state.cells = previousCells!;
       }),
 
     setCellValue: (id, value) =>
@@ -57,7 +55,7 @@ const useStore = create<State & Actions>()(
         const cell = state.cells[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
-        get().addHistory();
+        state.history.push(current(state.cells));
         state.cells[id] = {
           ...cell,
           given: false,
@@ -78,7 +76,7 @@ const useStore = create<State & Actions>()(
           newNotes.add(value);
         }
 
-        get().addHistory();
+        state.history.push(current(state.cells));
         state.cells[id] = { ...cell, notes: Array.from(newNotes) };
       }),
 
