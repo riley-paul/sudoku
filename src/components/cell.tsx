@@ -43,7 +43,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectCell(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-base font-extralight transition-all duration-75 ease-in md:text-2xl",
+        "relative size-fit cursor-pointer text-base font-extralight transition-all duration-100 ease-in md:text-2xl",
         {
           "border-r border-r-gray-400": cell.col === 2 || cell.col === 5,
           "border-l border-l-gray-400": cell.col === 3 || cell.col === 6,
