@@ -8,7 +8,14 @@ enableMapSet();
 type State = {
   cells: Record<string, Cell>;
   selectedCellId: string | null;
+};
 
+const initialState: State = {
+  cells: initBoard(),
+  selectedCellId: null,
+};
+
+type Actions = {
   setValue: (id: string, value: number | null) => void;
   toggleNote: (id: string, value: number) => void;
   selectCell: (id: string) => void;
@@ -18,9 +25,8 @@ type State = {
   setCells: (cells: Record<string, Cell>) => void;
 };
 
-const useStore = create<State>((set) => ({
-  cells: initBoard(),
-  selectedCellId: null,
+const useStore = create<State & Actions>((set) => ({
+  ...initialState,
 
   setValue: (id, value) =>
     set(

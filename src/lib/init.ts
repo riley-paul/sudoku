@@ -1,4 +1,4 @@
-import { getId } from "./helpers";
+import { getId, getRandomValue } from "./helpers";
 import type { Cell } from "./types";
 
 export function initCell(row: number, col: number): Cell {
@@ -10,7 +10,7 @@ export function initCell(row: number, col: number): Cell {
     row,
     col,
     box,
-    value: null,
+    value: Math.random() > 0.5 ? getRandomValue() : null,
     given: false,
     notes: new Set(),
   };
