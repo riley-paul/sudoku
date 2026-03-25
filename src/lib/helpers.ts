@@ -1,4 +1,4 @@
-import type { Cells } from "./types";
+import type { Cell, Cells } from "./types";
 
 export const getId = (row: number, col: number) => `r${row}c${col}`;
 
@@ -22,3 +22,15 @@ export const blurActiveElement = () => {
     document.activeElement.blur();
   }
 };
+
+export function hasConflict(cells: Cells, cell: Cell): boolean {
+  if (!cell.value) return false;
+
+  const peers = Object.values(cells).filter(
+    (c) =>
+      c.id !== cell.id &&
+      (c.row === cell.row || c.col === cell.col || c.box === cell.box),
+  );
+
+  return peers.some((c) => c.value === cell.value);
+}

@@ -2,6 +2,7 @@ import useStore from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
 import { cn } from "@/lib/utils";
 import React from "react";
+import Notes from "./notes";
 
 type Props = { id: string };
 
@@ -39,7 +40,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectCell(id)}
       className={cn(
-        "relative size-8 cursor-pointer text-base font-extralight md:size-10 md:text-2xl",
+        "relative size-8 cursor-pointer text-base font-extralight transition-all duration-75 ease-in md:size-10 md:text-2xl",
         {
           "after:absolute after:inset-0 after:border after:border-transparent": true,
           "before:absolute before:inset-0 before:border before:border-transparent": true,
@@ -58,7 +59,7 @@ const Cell: React.FC<Props> = ({ id }) => {
         },
       )}
     >
-      {cell?.value}
+      {cell.value ? cell.value : <Notes notes={cell.notes} />}
     </button>
   );
 };

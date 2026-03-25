@@ -9,11 +9,15 @@ enableMapSet();
 type State = {
   cells: Cells;
   selectedCellId: string | null;
+  history: Cells[];
+  mode: "value" | "note";
 };
 
 const initialState: State = {
   cells: initBoard(),
   selectedCellId: null,
+  history: [],
+  mode: "value",
 };
 
 type Actions = {

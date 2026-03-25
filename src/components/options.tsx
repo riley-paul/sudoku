@@ -5,11 +5,23 @@ import { useShallow } from "zustand/react/shallow";
 import { cn } from "@/lib/utils";
 
 const Options: React.FC = () => {
-  const { selectedCellId, setValue, cells } = useStore(
-    useShallow(({ selectedCellId, setValue, cells }) => ({
+  const {
+    selectedCellId,
+    setValue,
+    cells,
+    mode,
+    toggleNote,
+    selectedCellNotes,
+  } = useStore(
+    useShallow(({ selectedCellId, setValue, toggleNote, cells, mode }) => ({
       selectedCellId,
+      selectedCellNotes: selectedCellId
+        ? cells[selectedCellId]?.notes
+        : undefined,
       setValue,
+      toggleNote,
       cells,
+      mode,
     })),
   );
 
@@ -21,24 +33,32 @@ const Options: React.FC = () => {
           (cell) => cell.value === value,
         ).length;
         const numRemaining = 9 - numWithValue;
-
-        const isDisabled = numRemaining <= 0;
+        const notesHasValue = selectedCellNotes?.has(value);
 
         return (
           <Button
             size="sm"
             variant="outline"
             className={cn("flex h-14 flex-col p-0 md:h-16", {
-              "opacity-0!": isDisabled,
+              "opacity-0!": numRemaining <= 0,
             })}
-            disabled={isDisabled}
+            disabled={numRemaining <= 0}
             onClick={() => {
               if (selectedCellId) {
-                setValue(selectedCellId, value);
+                if (mode === "value") {
+                  setValue(selectedCellId, value);
+                } else if (mode === "note") {
+                  toggleNote(selectedCellId, value);
+                }
               }
             }}
           >
-            <div className="text-primary text-lg font-light md:text-2xl">
+            <div
+              className={cn("text-primary text-lg font-light md:text-2xl", {
+                "text-muted-foreground": mode === "note",
+                "text-muted-foreground/50": mode === "note" && notesHasValue,
+              })}
+            >
               {value}
             </div>
             <div className="text-muted-foreground text-xs font-light">
