@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { produce, enableMapSet } from "immer";
 import type { Cell } from "./types";
+import { initBoard } from "./init";
 
 enableMapSet();
 
@@ -18,7 +19,7 @@ type State = {
 };
 
 const useStore = create<State>((set) => ({
-  cells: {}, // This will be initialized with the puzzle data
+  cells: initBoard(),
   selectedCellId: null,
 
   setValue: (id, value) =>

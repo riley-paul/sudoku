@@ -1,7 +1,8 @@
+import { getId } from "./helpers";
 import type { Cell } from "./types";
 
 export function initCell(row: number, col: number): Cell {
-  const id = `r${row}c${col}`;
+  const id = getId(row, col);
   const box = Math.floor(row / 3) * 3 + Math.floor(col / 3);
 
   return {

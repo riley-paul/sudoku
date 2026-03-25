@@ -1,8 +1,10 @@
 ---
-import { Button } from "@/components/ui/button";
 import RootLayout from "./_root-layout.astro";
+import Board from "@/components/board";
 ---
 
 <RootLayout>
-  <Button>Click me</Button>
+  <main class="flex h-screen w-screen items-center justify-center">
+    <Board client:load />
+  </main>
 </RootLayout>
