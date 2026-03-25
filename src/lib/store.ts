@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { produce, enableMapSet } from "immer";
-import type { Cell, Cells } from "./types";
+import type { Cells } from "./types";
 import { initBoard } from "./init";
 import { getId } from "./helpers";
 

@@ -1,10 +1,6 @@
 import { blurActiveElement, GRID } from "@/lib/helpers";
 import React from "react";
-import {
-  useHotkey,
-  useHotkeys,
-  type UseHotkeyDefinition,
-} from "@tanstack/react-hotkeys";
+import { useHotkeys } from "@tanstack/react-hotkeys";
 
 import Cell from "./cell";
 import useStore from "@/lib/store";
