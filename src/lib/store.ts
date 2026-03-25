@@ -1,6 +1,8 @@
 import { create } from "zustand";
-import { produce } from "immer";
+import { produce, enableMapSet } from "immer";
 import type { Cell } from "./types";
+
+enableMapSet();
 
 type State = {
   cells: Record<string, Cell>;
