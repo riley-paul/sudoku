@@ -4,7 +4,10 @@ import Board from "@/components/board";
 ---
 
 <RootLayout>
-  <main class="flex h-screen w-screen items-center justify-center">
-    <Board client:load />
+  <main class="flex h-screen w-screen justify-center p-6">
+    <div class="flex flex-col gap-4">
+      <h1 class="text-5xl font-black tracking-tight">Sudoku</h1>
+      <Board client:load />
+    </div>
   </main>
 </RootLayout>

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { produce, enableMapSet } from "immer";
 import type { Cell } from "./types";
 import { initBoard } from "./init";
+import { getId } from "./helpers";
 
 enableMapSet();
 
@@ -19,6 +20,7 @@ type Actions = {
   setValue: (id: string, value: number | null) => void;
   toggleNote: (id: string, value: number) => void;
   selectCell: (id: string) => void;
+  moveSelection: (direction: "up" | "down" | "left" | "right") => void;
 
   clearCell: (id: string) => void;
 
@@ -60,6 +62,39 @@ const useStore = create<State & Actions>((set) => ({
     ),
 
   selectCell: (id) => set(() => ({ selectedCellId: id })),
+
+  moveSelection: (direction) =>
+    set(
+      produce((state) => {
+        if (!state.selectedCellId) return state;
+
+        const currentCell = state.cells[state.selectedCellId];
+        if (!currentCell) return state;
+
+        let newRow = currentCell.row;
+        let newCol = currentCell.col;
+
+        switch (direction) {
+          case "up":
+            newRow = Math.max(0, currentCell.row - 1);
+            break;
+          case "down":
+            newRow = Math.min(8, currentCell.row + 1);
+            break;
+          case "left":
+            newCol = Math.max(0, currentCell.col - 1);
+            break;
+          case "right":
+            newCol = Math.min(8, currentCell.col + 1);
+            break;
+        }
+
+        const newId = getId(newRow, newCol);
+        if (state.cells[newId]) {
+          state.selectedCellId = newId;
+        }
+      }),
+    ),
 
   clearCell: (id) =>
     set(
