@@ -31,10 +31,25 @@ type Actions = {
   clearCell: (id: string) => void;
 
   setCells: (cells: Cells) => void;
+
+  undo: () => void;
 };
 
 const useStore = create<State & Actions>((set) => ({
   ...initialState,
+
+  undo: () =>
+    set(
+      produce((state) => {
+        console.log(state.history);
+
+        if (state.history.length === 0) return state;
+
+        const previousCells = state.history[state.history.length - 1];
+        state.history = state.history.slice(0, -1);
+        state.cells = previousCells;
+      }),
+    ),
 
   setValue: (id, value) =>
     set(
@@ -42,8 +57,10 @@ const useStore = create<State & Actions>((set) => ({
         const cell = state.cells[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
+        state.history.push(state.cells);
         state.cells[id] = {
           ...cell,
+          given: false,
           value,
           notes: new Set(), // Clear notes when a value is set
         };
@@ -63,6 +80,7 @@ const useStore = create<State & Actions>((set) => ({
           newNotes.add(value);
         }
 
+        state.history.push(state.cells);
         state.cells[id] = { ...cell, notes: newNotes };
       }),
     ),

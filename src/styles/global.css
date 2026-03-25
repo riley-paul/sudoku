@@ -61,7 +61,7 @@
   --popover-foreground: var(--color-gray-950);
 
   --primary: var(--color-sky-600);
-  --primary-foreground: var(--color-sky-100);
+  --primary-foreground: var(--color-sky-50);
 
   --secondary: var(--color-sky-100);
   --secondary-foreground: var(--color-sky-800);

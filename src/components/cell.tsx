@@ -52,10 +52,11 @@ const Cell: React.FC<Props> = ({ id }) => {
             cell.row !== 2 && cell.row !== 5 && cell.row !== 8,
           "before:border-r-gray-200":
             cell.col !== 2 && cell.col !== 5 && cell.col !== 8,
+          "text-sky-800": !cell.given,
           "bg-gray-100":
             isSameBoxAsSelected || isSameColAsSelected || isSameRowAsSelected,
           "bg-sky-100": isSameValueAsSelected,
-          "bg-sky-600 text-white": isSelected,
+          "bg-primary text-primary-foreground": isSelected,
         },
       )}
     >

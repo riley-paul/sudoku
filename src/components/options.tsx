@@ -37,6 +37,7 @@ const Options: React.FC = () => {
 
         return (
           <Button
+            key={value}
             size="sm"
             variant="outline"
             className={cn("flex h-14 flex-col p-0 md:h-16", {

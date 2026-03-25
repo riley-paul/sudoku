@@ -8,9 +8,6 @@ export type Cell = {
   given: boolean; // pre-filled puzzle cell
 
   notes: Set<number>; // pencil marks
-
-  isSelected?: boolean;
-  isError?: boolean;
 };
 
 export type Cells = Record<string, Cell>;
