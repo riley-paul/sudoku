@@ -26,6 +26,8 @@ type Actions = {
   selectCell: (id: string) => void;
   moveSelection: (direction: "up" | "down" | "left" | "right") => void;
 
+  toggleMode: () => void;
+
   clearCell: (id: string) => void;
 
   setCells: (cells: Cells) => void;
@@ -64,6 +66,11 @@ const useStore = create<State & Actions>((set) => ({
         state.cells[id] = { ...cell, notes: newNotes };
       }),
     ),
+
+  toggleMode: () =>
+    set((state) => ({
+      mode: state.mode === "value" ? "note" : "value",
+    })),
 
   selectCell: (id) => set(() => ({ selectedCellId: id })),
 

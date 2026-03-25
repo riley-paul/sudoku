@@ -64,7 +64,7 @@
   --primary-foreground: var(--color-sky-100);
 
   --secondary: var(--color-sky-100);
-  --secondary-foreground: var(--color-sky-950);
+  --secondary-foreground: var(--color-sky-800);
 
   --muted: var(--color-gray-100);
   --muted-foreground: var(--color-gray-500);
