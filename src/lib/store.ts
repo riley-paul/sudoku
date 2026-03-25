@@ -11,6 +11,8 @@ type State = {
   selectCell: (id: string) => void;
 
   clearCell: (id: string) => void;
+
+  setCells: (cells: Record<string, Cell>) => void;
 };
 
 const useStore = create<State>((set) => ({
@@ -59,6 +61,8 @@ const useStore = create<State>((set) => ({
         state.cells[id] = { ...cell, value: null, notes: new Set() };
       }),
     ),
+
+  setCells: (cells) => set(() => ({ cells })),
 }));
 
 export default useStore;
