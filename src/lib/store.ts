@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { produce, enableMapSet } from "immer";
-import type { Cell } from "./types";
+import type { Cell, Cells } from "./types";
 import { initBoard } from "./init";
 import { getId } from "./helpers";
 
 enableMapSet();
 
 type State = {
-  cells: Record<string, Cell>;
+  cells: Cells;
   selectedCellId: string | null;
 };
 
@@ -24,7 +24,7 @@ type Actions = {
 
   clearCell: (id: string) => void;
 
-  setCells: (cells: Record<string, Cell>) => void;
+  setCells: (cells: Cells) => void;
 };
 
 const useStore = create<State & Actions>((set) => ({

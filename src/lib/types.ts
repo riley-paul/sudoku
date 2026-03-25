@@ -1,14 +1,16 @@
 export type Cell = {
-  id: string // "r0c0"
-  row: number
-  col: number
-  box: number
+  id: string; // "r0c0"
+  row: number;
+  col: number;
+  box: number;
 
-  value: number | null
-  given: boolean // pre-filled puzzle cell
+  value: number | null;
+  given: boolean; // pre-filled puzzle cell
 
-  notes: Set<number> // pencil marks
+  notes: Set<number>; // pencil marks
 
-  isSelected?: boolean
-  isError?: boolean
-}
+  isSelected?: boolean;
+  isError?: boolean;
+};
+
+export type Cells = Record<string, Cell>;

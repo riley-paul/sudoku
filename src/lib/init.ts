@@ -1,5 +1,5 @@
 import { getId, getRandomValue } from "./helpers";
-import type { Cell } from "./types";
+import type { Cell, Cells } from "./types";
 
 export function initCell(row: number, col: number): Cell {
   const id = getId(row, col);
@@ -16,8 +16,8 @@ export function initCell(row: number, col: number): Cell {
   };
 }
 
-export function initBoard(): Record<string, Cell> {
-  const board: Record<string, Cell> = {};
+export function initBoard(): Cells {
+  const board: Cells = {};
 
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
