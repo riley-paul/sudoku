@@ -36,31 +36,37 @@ const Cell: React.FC<Props> = ({ id }) => {
     })),
   );
 
+  const isPeer =
+    isSameBoxAsSelected || isSameColAsSelected || isSameRowAsSelected;
+
   return (
     <button
       onClick={() => selectCell(id)}
       className={cn(
-        "relative size-8 cursor-pointer text-base font-extralight transition-all duration-75 ease-in md:size-10 md:text-2xl",
+        "relative size-fit cursor-pointer text-base font-extralight transition-all duration-75 ease-in md:text-2xl",
         {
-          "after:absolute after:inset-0 after:border after:border-transparent": true,
-          "before:absolute before:inset-0 before:border before:border-transparent": true,
           "border-r border-r-gray-400": cell.col === 2 || cell.col === 5,
           "border-l border-l-gray-400": cell.col === 3 || cell.col === 6,
           "border-b border-b-gray-400": cell.row === 2 || cell.row === 5,
           "border-t border-t-gray-400": cell.row === 3 || cell.row === 6,
-          "after:border-b-gray-200":
-            cell.row !== 2 && cell.row !== 5 && cell.row !== 8,
-          "before:border-r-gray-200":
-            cell.col !== 2 && cell.col !== 5 && cell.col !== 8,
+
           "text-sky-800": !cell.given,
-          "bg-gray-100":
-            isSameBoxAsSelected || isSameColAsSelected || isSameRowAsSelected,
+          "bg-gray-100": isPeer,
           "bg-sky-100": isSameValueAsSelected,
           "bg-primary text-primary-foreground": isSelected,
         },
       )}
     >
-      {cell.value ? cell.value : <Notes notes={cell.notes} />}
+      <div
+        className={cn("flex size-8 items-center justify-center md:size-10", {
+          "border-b border-b-gray-200":
+            cell.row !== 2 && cell.row !== 5 && cell.row !== 8,
+          "border-r border-r-gray-200":
+            cell.col !== 2 && cell.col !== 5 && cell.col !== 8,
+        })}
+      >
+        {cell.value ? cell.value : <Notes notes={cell.notes} />}
+      </div>
     </button>
   );
 };
