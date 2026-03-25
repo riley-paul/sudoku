@@ -7,19 +7,23 @@ import { useHotkey } from "@tanstack/react-hotkeys";
 import { Button } from "./ui/button";
 
 const BoardFooter: React.FC = () => {
-  const { mode, toggleMode, undo } = useStore(
-    useShallow(({ mode, toggleMode, undo }) => ({ mode, toggleMode, undo })),
+  const { entryMode, toggleEntryMode, undo } = useStore(
+    useShallow(({ entryMode, toggleEntryMode, undo }) => ({
+      entryMode,
+      toggleEntryMode,
+      undo,
+    })),
   );
 
-  useHotkey("N", toggleMode);
+  useHotkey("N", toggleEntryMode);
 
   return (
     <div className="flex w-full items-center justify-between gap-2">
       <Label className="text-muted-foreground text-xs">
         <Switch
           size="sm"
-          checked={mode === "note"}
-          onCheckedChange={toggleMode}
+          checked={entryMode === "note"}
+          onCheckedChange={toggleEntryMode}
         />
         Note mode
         <div className="bg-muted text-muted-foreground flex size-4 items-center justify-center rounded-sm border text-[0.5rem]">

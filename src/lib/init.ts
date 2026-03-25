@@ -14,7 +14,7 @@ export function initCell(row: number, col: number): Cell {
     box,
     value: given ? getRandomValue() : null,
     given,
-    notes: new Set(),
+    notes: [],
   };
 }
 

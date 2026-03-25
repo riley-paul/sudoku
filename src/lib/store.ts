@@ -1,46 +1,42 @@
 import { create } from "zustand";
-import { produce, enableMapSet } from "immer";
+import { immer } from "zustand/middleware/immer";
 import type { Cells } from "./types";
 import { initBoard } from "./init";
 import { getId } from "./helpers";
-
-enableMapSet();
 
 type State = {
   cells: Cells;
   selectedCellId: string | null;
   history: Cells[];
-  mode: "value" | "note";
+  entryMode: "value" | "note";
 };
 
 const initialState: State = {
   cells: initBoard(),
   selectedCellId: null,
   history: [],
-  mode: "value",
+  entryMode: "value",
 };
 
 type Actions = {
-  setValue: (id: string, value: number | null) => void;
-  toggleNote: (id: string, value: number) => void;
+  setCellValue: (id: string, value: number | null) => void;
+
+  toggleCellNote: (id: string, value: number) => void;
+
   selectCell: (id: string) => void;
   moveSelection: (direction: "up" | "down" | "left" | "right") => void;
 
-  toggleMode: () => void;
-
-  clearCell: (id: string) => void;
-
-  setCells: (cells: Cells) => void;
+  toggleEntryMode: () => void;
 
   undo: () => void;
 };
 
-const useStore = create<State & Actions>((set) => ({
-  ...initialState,
+const useStore = create<State & Actions>()(
+  immer((set) => ({
+    ...initialState,
 
-  undo: () =>
-    set(
-      produce((state) => {
+    undo: () =>
+      set((state) => {
         console.log(state.history);
 
         if (state.history.length === 0) return state;
@@ -49,11 +45,9 @@ const useStore = create<State & Actions>((set) => ({
         state.history = state.history.slice(0, -1);
         state.cells = previousCells;
       }),
-    ),
 
-  setValue: (id, value) =>
-    set(
-      produce((state) => {
+    setCellValue: (id, value) =>
+      set((state) => {
         const cell = state.cells[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
@@ -62,14 +56,12 @@ const useStore = create<State & Actions>((set) => ({
           ...cell,
           given: false,
           value,
-          notes: new Set(), // Clear notes when a value is set
+          notes: [], // Clear notes when a value is set
         };
       }),
-    ),
 
-  toggleNote: (id, value) =>
-    set(
-      produce((state) => {
+    toggleCellNote: (id, value) =>
+      set((state) => {
         const cell = state.cells[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
@@ -81,20 +73,18 @@ const useStore = create<State & Actions>((set) => ({
         }
 
         state.history.push(state.cells);
-        state.cells[id] = { ...cell, notes: newNotes };
+        state.cells[id] = { ...cell, notes: Array.from(newNotes) };
       }),
-    ),
 
-  toggleMode: () =>
-    set((state) => ({
-      mode: state.mode === "value" ? "note" : "value",
-    })),
+    toggleEntryMode: () =>
+      set((state) => {
+        state.entryMode = state.entryMode === "value" ? "note" : "value";
+      }),
 
-  selectCell: (id) => set(() => ({ selectedCellId: id })),
+    selectCell: (id) => set(() => ({ selectedCellId: id })),
 
-  moveSelection: (direction) =>
-    set(
-      produce((state) => {
+    moveSelection: (direction) =>
+      set((state) => {
         if (!state.selectedCellId) return state;
 
         const currentCell = state.cells[state.selectedCellId];
@@ -123,19 +113,7 @@ const useStore = create<State & Actions>((set) => ({
           state.selectedCellId = newId;
         }
       }),
-    ),
-
-  clearCell: (id) =>
-    set(
-      produce((state) => {
-        const cell = state.cells[id];
-        if (!cell || cell.given) return state; // Don't allow changes to given cells
-
-        state.cells[id] = { ...cell, value: null, notes: new Set() };
-      }),
-    ),
-
-  setCells: (cells) => set(() => ({ cells })),
-}));
+  })),
+);
 
 export default useStore;

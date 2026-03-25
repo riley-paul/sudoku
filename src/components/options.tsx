@@ -7,22 +7,24 @@ import { cn } from "@/lib/utils";
 const Options: React.FC = () => {
   const {
     selectedCellId,
-    setValue,
+    setCellValue,
     cells,
-    mode,
-    toggleNote,
+    entryMode,
+    toggleCellNote,
     selectedCellNotes,
   } = useStore(
-    useShallow(({ selectedCellId, setValue, toggleNote, cells, mode }) => ({
-      selectedCellId,
-      selectedCellNotes: selectedCellId
-        ? cells[selectedCellId]?.notes
-        : undefined,
-      setValue,
-      toggleNote,
-      cells,
-      mode,
-    })),
+    useShallow(
+      ({ selectedCellId, setCellValue, toggleCellNote, cells, entryMode }) => ({
+        selectedCellId,
+        selectedCellNotes: selectedCellId
+          ? cells[selectedCellId]?.notes
+          : undefined,
+        setCellValue,
+        toggleCellNote,
+        cells,
+        entryMode,
+      }),
+    ),
   );
 
   return (
@@ -33,7 +35,7 @@ const Options: React.FC = () => {
           (cell) => cell.value === value,
         ).length;
         const numRemaining = 9 - numWithValue;
-        const notesHasValue = selectedCellNotes?.has(value);
+        const notesHasValue = selectedCellNotes?.includes(value);
 
         return (
           <Button
@@ -46,18 +48,18 @@ const Options: React.FC = () => {
             disabled={numRemaining <= 0}
             onClick={() => {
               if (selectedCellId) {
-                if (mode === "value") {
-                  setValue(selectedCellId, value);
-                } else if (mode === "note") {
-                  toggleNote(selectedCellId, value);
+                if (entryMode === "value") {
+                  setCellValue(selectedCellId, value);
+                } else if (entryMode === "note") {
+                  toggleCellNote(selectedCellId, value);
                 }
               }
             }}
           >
             <div
               className={cn("text-primary text-lg font-light md:text-2xl", {
-                "text-muted-foreground": mode === "note",
-                "text-muted-foreground/50": mode === "note" && notesHasValue,
+                "text-muted-foreground": entryMode === "note",
+                "text-muted-foreground/50": entryMode === "note" && notesHasValue,
               })}
             >
               {value}

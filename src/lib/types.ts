@@ -7,7 +7,7 @@ export type Cell = {
   value: number | null;
   given: boolean; // pre-filled puzzle cell
 
-  notes: Set<number>; // pencil marks
+  notes: number[];
 };
 
 export type Cells = Record<string, Cell>;
