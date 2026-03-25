@@ -39,7 +39,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectCell(id)}
       className={cn(
-        "relative size-8 cursor-pointer text-base font-light md:size-12 md:text-2xl",
+        "relative size-8 cursor-pointer text-base font-extralight md:size-10 md:text-2xl",
         {
           "after:absolute after:inset-0 after:border after:border-transparent": true,
           "before:absolute before:inset-0 before:border before:border-transparent": true,
@@ -53,7 +53,7 @@ const Cell: React.FC<Props> = ({ id }) => {
             cell.col !== 2 && cell.col !== 5 && cell.col !== 8,
           "bg-gray-100":
             isSameBoxAsSelected || isSameColAsSelected || isSameRowAsSelected,
-          "bg-sky-200": isSameValueAsSelected,
+          "bg-sky-100": isSameValueAsSelected,
           "bg-sky-600 text-white": isSelected,
         },
       )}
