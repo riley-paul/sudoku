@@ -1,7 +1,10 @@
 import { initBoard } from "./init";
 import type { Cell, Cells } from "./types";
 
-export const getId = (row: number, col: number) => `r${row}c${col}`;
+const ROW_LABELS = "ABCDEFGHI";
+const COL_LABELS = "123456789";
+export const getId = (row: number, col: number) =>
+  `${ROW_LABELS[row]}${COL_LABELS[col]}`;
 
 export const getRow = (cells: Cells, row: number) =>
   Object.values(cells).filter((cell) => cell.row === row);
@@ -118,5 +121,3 @@ export function generateFullBoard(): Cells {
   fillBoard(cells);
   return cells;
 }
-
-
