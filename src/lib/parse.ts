@@ -1,5 +1,14 @@
 import type { Puzzle } from "./types";
 
+/**
+ * Parses a Sudoku puzzle from a string representation.
+ * The input string should be exactly 81 characters long, where each character represents a cell in the Sudoku grid.
+ * Digits 1-9 represent given values, and dots (.) represent empty cells.
+ *
+ * @param value - The string representation of the Sudoku puzzle.
+ * @returns A Puzzle object representing the parsed Sudoku grid.
+ * @throws Will throw an error if the input string is not exactly 81 characters long or contains invalid characters.
+ */
 export function parsePuzzle(value: string): Puzzle {
   const values = value.split("");
   const puzzle: Puzzle = {} as Puzzle;
@@ -35,20 +44,28 @@ function setCharAt(str: string, index: number, chr: string): string {
   return str.substring(0, index) + chr + str.substring(index + 1);
 }
 
-export function printPuzzle(puzzle: Puzzle, printIds = false): string {
+/**
+ * Converts a Puzzle object into a human-readable string format.
+ * The output string will display the Sudoku grid with optional square IDs.
+ *
+ * @param puzzle - The Puzzle object to be printed.
+ * @param printCell - If true, the output will include square IDs instead of values. Defaults to false.
+ * @returns A string representation of the Sudoku grid.
+ */
+export function printPuzzle(puzzle: Puzzle, printCell = false): string {
   const rows = "ABCDEFGHI";
   const cols = "123456789";
   let result = "";
 
-  let rowSeparator = "-".repeat(printIds ? 30 : 21) + "\n";
-  rowSeparator = setCharAt(rowSeparator, printIds ? 9 : 6, "+");
-  rowSeparator = setCharAt(rowSeparator, printIds ? 20 : 14, "+");
+  let rowSeparator = "-".repeat(printCell ? 30 : 21) + "\n";
+  rowSeparator = setCharAt(rowSeparator, printCell ? 9 : 6, "+");
+  rowSeparator = setCharAt(rowSeparator, printCell ? 20 : 14, "+");
 
   for (const row of rows) {
     let rowStr = "";
     for (const col of cols) {
       const square = `${row}${col}` as keyof Puzzle;
-      if (printIds) {
+      if (printCell) {
         rowStr += square + " ";
       } else {
         rowStr += (puzzle[square] || ".") + " ";
