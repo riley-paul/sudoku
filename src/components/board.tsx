@@ -1,6 +1,10 @@
 import { blurActiveElement } from "@/lib/helpers";
 import React from "react";
-import { useHotkeys, type RegisterableHotkey } from "@tanstack/react-hotkeys";
+import {
+  useHotkey,
+  useHotkeys,
+  type RegisterableHotkey,
+} from "@tanstack/react-hotkeys";
 
 import Cell from "./cell";
 import useStore from "@/lib/store";
@@ -50,10 +54,16 @@ const Board: React.FC = () => {
     setValueHotKeys.map(({ key, value }) => ({
       hotkey: key,
       callback: () => {
+        blurActiveElement();
         setSquareValue(selectedSquare, value);
       },
     })),
   );
+
+  useHotkey("Backspace", () => {
+    blurActiveElement();
+    setSquareValue(selectedSquare, null);
+  });
 
   return (
     <div className="grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">

@@ -1,10 +1,9 @@
 import useStore from "@/lib/store";
-import { useShallow } from "zustand/react/shallow";
 import { cn } from "@/lib/utils";
 import React from "react";
 import Notes from "./notes";
 import type { Square } from "@/sudoku/types";
-import { PEERS } from "@/sudoku/const";
+import { PEERS, SQUARES } from "@/sudoku/const";
 
 type Props = { id: Square };
 
@@ -12,6 +11,15 @@ const Cell: React.FC<Props> = ({ id }) => {
   const s = useStore((s) => s.squares[id]);
   const selected = useStore((s) => s.squares[s.selectedSquare]);
   const selectSquare = useStore((s) => s.selectSquare);
+  const isInvalid = useStore((s) => {
+    const { value } = s.squares[id];
+    if (value === null) return false;
+
+    const squaresWithValue = SQUARES.filter(
+      (square) => s.squares[square].value === value,
+    );
+    return squaresWithValue.some((i) => PEERS[id].has(i));
+  });
 
   const isPeer = PEERS[id].has(selected.id);
 
@@ -19,7 +27,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectSquare(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-base font-extralight transition-all duration-100 ease-in md:text-2xl",
+        "relative size-fit cursor-pointer text-base font-extralight transition-all duration-200 ease-out md:text-2xl",
         {
           "border-r border-r-gray-400": s.col === "3" || s.col === "6",
           "border-l border-l-gray-400": s.col === "4" || s.col === "7",
@@ -29,7 +37,12 @@ const Cell: React.FC<Props> = ({ id }) => {
           "text-sky-800": !s.given,
           "bg-gray-100": isPeer,
           "bg-sky-100": s.value === selected.value && s.value !== null,
-          "bg-primary text-primary-foreground": id === selected.id,
+          "text-destructive": isInvalid,
+        },
+
+        id === selected.id && {
+          "bg-primary text-primary-foreground": true,
+          "bg-destructive text-white": isInvalid,
         },
       )}
     >

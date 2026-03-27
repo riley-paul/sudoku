@@ -7,6 +7,7 @@ import useStore from "./lib/store";
 import { SQUARES } from "./sudoku/const";
 import type { Square } from "./sudoku/types";
 import { printGrid } from "./sudoku/parse";
+import Options from "./components/options";
 
 type Props = { squares: Squares };
 
@@ -34,7 +35,7 @@ const App: React.FC<Props> = ({ squares }) => {
         <EntryModeToggle />
         <UndoButton />
       </footer>
-      {/*<Options />*/}
+      <Options />
     </div>
   );
 };
