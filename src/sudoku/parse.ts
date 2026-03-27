@@ -1,5 +1,5 @@
-import { COLS, ROWS } from "./const";
-import type { Puzzle } from "./types";
+import { COLS, ROWS, SQUARES } from "./const";
+import type { Digit, Puzzle } from "./types";
 import { getSquare } from "./utils";
 
 /**
@@ -28,13 +28,7 @@ export function parsePuzzle(value: string): Puzzle {
       );
     }
 
-    const row = ROWS[Math.floor(i / 9)];
-    const col = COLS[i % 9];
-    const square = getSquare(row, col);
-
-    const value = values[i];
-
-    puzzle[square] = value === "." ? null : (value as Puzzle[typeof square]);
+    puzzle[SQUARES[i]] = values[i] === "." ? null : (values[i] as Digit);
   }
 
   return puzzle;
