@@ -4,5 +4,4 @@ export type Row = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I";
 export type DigitSet = Set<Digit>;
 export type Square = `${Row}${Digit}`;
 export type Grid = Record<Square, DigitSet>;
-export type Puzzle = Record<Square, Digit | null>;
 export type Unit = Square[];

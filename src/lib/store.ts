@@ -1,30 +1,33 @@
-import { current } from "immer";
+import { current, enableMapSet } from "immer";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import type { Cells } from "./types";
-import { initBoard } from "./init";
-import { getId } from "./helpers";
+import type { Squares } from "./types";
+import { initSquares } from "./init";
+import type { Digit, Square } from "@/sudoku/types";
+import { COLS, ROWS } from "@/sudoku/const";
+import { getSquare } from "@/sudoku/utils";
+
+enableMapSet();
 
 type State = {
-  cells: Cells;
-  selectedCellId: string | null;
-  history: Cells[];
+  squares: Squares;
+  selectedSquare: Square;
+  history: Squares[];
   entryMode: "value" | "note";
 };
 
 const initialState: State = {
-  cells: initBoard(),
-  selectedCellId: null,
+  squares: initSquares(),
+  selectedSquare: "E5",
   history: [],
   entryMode: "value",
 };
 
 type Actions = {
-  setCellValue: (id: string, value: number | null) => void;
+  setSquareValue: (id: Square, value: Digit | null) => void;
+  toggleSquareNote: (id: Square, value: Digit) => void;
 
-  toggleCellNote: (id: string, value: number) => void;
-
-  selectCell: (id: string) => void;
+  selectSquare: (id: Square) => void;
   moveSelection: (direction: "up" | "down" | "left" | "right") => void;
 
   toggleEntryMode: () => void;
@@ -39,7 +42,7 @@ const useStore = create<State & Actions>()(
 
     addHistory: () =>
       set((state) => {
-        state.history.push(current(state.cells));
+        state.history.push(current(state.squares));
       }),
 
     undo: () =>
@@ -47,26 +50,26 @@ const useStore = create<State & Actions>()(
         if (state.history.length === 0) return;
 
         const previousCells = state.history.pop();
-        state.cells = previousCells!;
+        state.squares = previousCells!;
       }),
 
-    setCellValue: (id, value) =>
+    setSquareValue: (id, value) =>
       set((state) => {
-        const cell = state.cells[id];
+        const cell = state.squares[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
-        state.history.push(current(state.cells));
-        state.cells[id] = {
+        state.history.push(current(state.squares));
+        state.squares[id] = {
           ...cell,
           given: false,
           value,
-          notes: [], // Clear notes when a value is set
+          notes: new Set(), // Clear notes when a value is set
         };
       }),
 
-    toggleCellNote: (id, value) =>
+    toggleSquareNote: (id, value) =>
       set((state) => {
-        const cell = state.cells[id];
+        const cell = state.squares[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
         const newNotes = new Set(cell.notes);
@@ -76,8 +79,8 @@ const useStore = create<State & Actions>()(
           newNotes.add(value);
         }
 
-        state.history.push(current(state.cells));
-        state.cells[id] = { ...cell, notes: Array.from(newNotes) };
+        state.history.push(current(state.squares));
+        state.squares[id] = { ...cell, notes: newNotes };
       }),
 
     toggleEntryMode: () =>
@@ -85,37 +88,44 @@ const useStore = create<State & Actions>()(
         state.entryMode = state.entryMode === "value" ? "note" : "value";
       }),
 
-    selectCell: (id) => set(() => ({ selectedCellId: id })),
+    selectSquare: (id) =>
+      set((state) => {
+        state.selectedSquare = id;
+      }),
 
     moveSelection: (direction) =>
       set((state) => {
-        if (!state.selectedCellId) return state;
+        if (!state.selectedSquare) return state;
 
-        const currentCell = state.cells[state.selectedCellId];
+        const currentCell = state.squares[state.selectedSquare];
         if (!currentCell) return state;
 
-        let newRow = currentCell.row;
-        let newCol = currentCell.col;
+        let newRowIdx = ROWS.indexOf(currentCell.row);
+        let newColIdx = COLS.indexOf(currentCell.col);
 
         switch (direction) {
           case "up":
-            newRow = Math.max(0, currentCell.row - 1);
+            newRowIdx -= 1;
             break;
           case "down":
-            newRow = Math.min(8, currentCell.row + 1);
+            newRowIdx += 1;
             break;
           case "left":
-            newCol = Math.max(0, currentCell.col - 1);
+            newColIdx -= 1;
             break;
           case "right":
-            newCol = Math.min(8, currentCell.col + 1);
+            newColIdx += 1;
             break;
         }
 
-        const newId = getId(newRow, newCol);
-        if (state.cells[newId]) {
-          state.selectedCellId = newId;
-        }
+        newRowIdx = Math.max(0, Math.min(ROWS.length - 1, newRowIdx));
+        newColIdx = Math.max(0, Math.min(COLS.length - 1, newColIdx));
+
+        const newRow = ROWS[newRowIdx];
+        const newCol = COLS[newColIdx];
+        if (!newRow || !newCol) return state;
+
+        state.selectedSquare = getSquare(newRow, newCol);
       }),
   })),
 );

@@ -1,16 +1,18 @@
 ---
 import App from "@/app";
 import RootLayout from "./_root-layout.astro";
-import { initBoard } from "@/lib/init";
-import { fillBoard } from "@/lib/helpers";
 
-const cells = initBoard();
-fillBoard(cells);
-// removeNumbers(cells);
+import puzzleData from "@/sudoku/test-puzzles/top95.txt?raw";
+import { initSquares } from "@/lib/init";
+
+const puzzles = puzzleData.split("\n").filter((line) => line.trim().length > 0);
+const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+
+const squares = initSquares(randomPuzzle);
 ---
 
 <RootLayout>
   <main class="flex h-screen w-screen justify-center p-6">
-    <App cells={cells} client:load />
+    <App squares={squares} client:load />
   </main>
 </RootLayout>

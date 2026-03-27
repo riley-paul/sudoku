@@ -1,19 +1,30 @@
 import React, { useEffect } from "react";
 import EntryModeToggle from "./components/controls/entry-mode-toggle";
 import Board from "./components/board";
-import Options from "./components/options";
 import UndoButton from "./components/controls/undo-button";
-import type { Cells } from "./lib/types";
+import type { Squares } from "./lib/types";
 import useStore from "./lib/store";
+import { SQUARES } from "./sudoku/const";
+import type { Square } from "./sudoku/types";
+import { printGrid } from "./sudoku/parse";
 
-type Props = {
-  cells: Cells;
-};
+type Props = { squares: Squares };
 
-const App: React.FC<Props> = ({ cells }) => {
+const App: React.FC<Props> = ({ squares }) => {
   useEffect(() => {
-    useStore.setState({ cells });
-  }, [cells]);
+    const grid = SQUARES.reduce(
+      (acc, val) => {
+        acc[val] = squares[val].value?.toString() || "";
+        return acc;
+      },
+      {} as Record<Square, string>,
+    );
+
+    console.log("Setting squares from server");
+    console.log(printGrid(grid));
+
+    useStore.setState({ squares });
+  }, [squares]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -23,7 +34,7 @@ const App: React.FC<Props> = ({ cells }) => {
         <EntryModeToggle />
         <UndoButton />
       </footer>
-      <Options />
+      {/*<Options />*/}
     </div>
   );
 };

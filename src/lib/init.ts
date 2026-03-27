@@ -1,30 +1,29 @@
-import { getId } from "./helpers";
-import type { Cell, Cells } from "./types";
+import type { Digit } from "@/sudoku/types";
+import type { Squares } from "./types";
+import { getSquare } from "@/sudoku/utils";
+import { parsePuzzle } from "@/sudoku/parse";
+import { COLS, ROWS, STARTING_GRID } from "@/sudoku/const";
 
-export function initCell(row: number, col: number): Cell {
-  const id = getId(row, col);
-  const box = Math.floor(row / 3) * 3 + Math.floor(col / 3);
+export function initSquares(print?: string): Squares {
+  const puzzle = print ? parsePuzzle(print) : structuredClone(STARTING_GRID);
+  const squares = {} as Squares;
 
-  return {
-    id,
-    row,
-    col,
-    box,
-    value: null,
-    given: false,
-    notes: [],
-  };
-}
+  for (const row of ROWS) {
+    for (const col of COLS) {
+      const id = getSquare(row, col);
+      const isFilled = puzzle[id].size === 1;
+      const [value] = [...puzzle[id]];
 
-export function initBoard(): Cells {
-  const board: Cells = {};
-
-  for (let row = 0; row < 9; row++) {
-    for (let col = 0; col < 9; col++) {
-      const cell = initCell(row, col);
-      board[cell.id] = cell;
+      squares[id] = {
+        id,
+        row,
+        col,
+        value: isFilled ? value : null,
+        given: isFilled,
+        notes: isFilled ? new Set<Digit>() : new Set(puzzle[id]),
+      };
     }
   }
 
-  return board;
+  return squares;
 }

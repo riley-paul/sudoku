@@ -1,10 +1,12 @@
-import { blurActiveElement, GRID } from "@/lib/helpers";
+import { blurActiveElement } from "@/lib/helpers";
 import React from "react";
-import { useHotkeys } from "@tanstack/react-hotkeys";
+import { useHotkeys, type RegisterableHotkey } from "@tanstack/react-hotkeys";
 
 import Cell from "./cell";
 import useStore from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
+import { SQUARES } from "@/sudoku/const";
+import type { Digit } from "@/sudoku/types";
 
 const moveHotKeys = [
   { key: "ArrowUp", direction: "up" },
@@ -13,24 +15,24 @@ const moveHotKeys = [
   { key: "ArrowRight", direction: "right" },
 ] as const;
 
-const setValueHotKeys = [
-  { key: "1", value: 1 },
-  { key: "2", value: 2 },
-  { key: "3", value: 3 },
-  { key: "4", value: 4 },
-  { key: "5", value: 5 },
-  { key: "6", value: 6 },
-  { key: "7", value: 7 },
-  { key: "8", value: 8 },
-  { key: "9", value: 9 },
-] as const;
+const setValueHotKeys: { key: RegisterableHotkey; value: Digit }[] = [
+  { key: "1", value: "1" },
+  { key: "2", value: "2" },
+  { key: "3", value: "3" },
+  { key: "4", value: "4" },
+  { key: "5", value: "5" },
+  { key: "6", value: "6" },
+  { key: "7", value: "7" },
+  { key: "8", value: "8" },
+  { key: "9", value: "9" },
+];
 
 const Board: React.FC = () => {
-  const { moveSelection, selectedCellId, setCellValue } = useStore(
-    useShallow(({ moveSelection, selectedCellId, setCellValue }) => ({
+  const { moveSelection, setSquareValue, selectedSquare } = useStore(
+    useShallow(({ moveSelection, selectedSquare, setSquareValue }) => ({
       moveSelection,
-      selectedCellId,
-      setCellValue,
+      setSquareValue,
+      selectedSquare,
     })),
   );
 
@@ -48,14 +50,14 @@ const Board: React.FC = () => {
     setValueHotKeys.map(({ key, value }) => ({
       hotkey: key,
       callback: () => {
-        if (selectedCellId) setCellValue(selectedCellId, value);
+        setSquareValue(selectedSquare, value);
       },
     })),
   );
 
   return (
     <div className="grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">
-      {GRID.flat().map((id) => (
+      {SQUARES.flat().map((id) => (
         <Cell key={id} id={id} />
       ))}
     </div>

@@ -1,13 +1,14 @@
-export type Cell = {
-  id: string; // "r0c0"
-  row: number;
-  col: number;
-  box: number;
+import type { Digit, Row, Square } from "@/sudoku/types";
 
-  value: number | null;
+export type SquareInfo = {
+  id: Square;
+  row: Row;
+  col: Digit;
+
+  value: Digit | null;
+
   given: boolean; // pre-filled puzzle cell
-
-  notes: number[];
+  notes: Set<Digit>; // candidate numbers for the cell
 };
 
-export type Cells = Record<string, Cell>;
+export type Squares = Record<Square, SquareInfo>;

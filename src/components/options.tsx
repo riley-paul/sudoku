@@ -14,7 +14,7 @@ const Options: React.FC = () => {
     selectedCellNotes,
   } = useStore(
     useShallow(
-      ({ selectedCellId, setCellValue, toggleCellNote, cells, entryMode }) => ({
+      ({ selectedCellId, setSquareValue: setCellValue, toggleCellNote, squares: cells, entryMode }) => ({
         selectedCellId,
         selectedCellNotes: selectedCellId
           ? cells[selectedCellId]?.notes
