@@ -1,5 +1,5 @@
 import { COLS, ROWS, SQUARES } from "./const";
-import type { DigitSet, Grid } from "./types";
+import type { Digit, DigitSet, Grid, Square } from "./types";
 import { getSquare } from "./utils";
 
 /**
@@ -26,7 +26,6 @@ export function parsePuzzle(picture: string): Grid {
   }, {} as Grid);
 
   for (let i = 0; i < values.length; i++) {
-    console.log(values[i]);
     const digits = new Set(values[i].match(/[1-9]/g) || []) as DigitSet;
 
     puzzle[SQUARES[i]] = digits;
@@ -35,9 +34,56 @@ export function parsePuzzle(picture: string): Grid {
   return puzzle;
 }
 
-function setCharAt(str: string, index: number, chr: string): string {
-  if (index > str.length - 1) return str;
-  return str.substring(0, index) + chr + str.substring(index + 1);
+export function printGrid(grid: Record<Square, string>): string {
+  let result = "";
+
+  const colWidths: Record<Digit, number> = COLS.reduce(
+    (acc, val) => {
+      const rowWidths = ROWS.map((row) => grid[getSquare(row, val)].length);
+      acc[val] = Math.max(...rowWidths, 1);
+      return acc;
+    },
+    {} as Record<Digit, number>,
+  );
+
+  for (const row of ROWS) {
+    let rowStr = "";
+    for (const col of COLS) {
+      const colWidth = colWidths[col];
+      const square = getSquare(row, col);
+      const value = grid[square];
+      rowStr += value
+        .padStart(value.length + Math.floor((colWidth - value.length) / 2))
+        .padEnd(colWidth);
+
+      if (col !== "9") rowStr += " ";
+      if (col === "3" || col === "6") rowStr += "| ";
+    }
+    result += rowStr + "\n";
+
+    if (row === "C" || row === "F") {
+      let separator = "";
+      COLS.forEach((col) => {
+        separator += "-".repeat(colWidths[col] + 1);
+        if (col === "4") separator += "-";
+        if (col === "3" || col === "6") separator += "+";
+      });
+      result += separator + "\n";
+    }
+  }
+  return result;
+}
+
+export function printSquares(): string {
+  const values = SQUARES.reduce(
+    (acc, val) => {
+      acc[val] = val;
+      return acc;
+    },
+    {} as Record<Square, string>,
+  );
+
+  return printGrid(values);
 }
 
 /**
@@ -45,29 +91,22 @@ function setCharAt(str: string, index: number, chr: string): string {
  * The output string will display the Sudoku grid with optional square IDs.
  *
  * @param puzzle - The Puzzle object to be printed.
- * @param printCell - If true, the output will include square IDs instead of values. Defaults to false.
  * @returns A string representation of the Sudoku grid.
  */
-export function printPuzzle(puzzle: Grid, printCell = false): string {
-  let result = "";
-
-  let rowSeparator = "-".repeat(printCell ? 30 : 21) + "\n";
-  rowSeparator = setCharAt(rowSeparator, printCell ? 9 : 6, "+");
-  rowSeparator = setCharAt(rowSeparator, printCell ? 20 : 14, "+");
-
-  for (const row of ROWS) {
-    let rowStr = "";
-    for (const col of COLS) {
-      const square = getSquare(row, col);
-      if (printCell) {
-        rowStr += square + " ";
+export function printPuzzle(puzzle: Grid): string {
+  const values = SQUARES.reduce(
+    (acc, val) => {
+      if (puzzle[val].size === 1) {
+        acc[val] = [...puzzle[val]][0];
+      } else if (puzzle[val].size > 1) {
+        acc[val] = "{" + [...puzzle[val]].join("") + "}";
       } else {
-        rowStr += (puzzle[square] || ".") + " ";
+        acc[val] = ".";
       }
-      if (col === "3" || col === "6") rowStr += "| ";
-    }
-    result += rowStr.trim() + "\n";
-    if (row === "C" || row === "F") result += rowSeparator;
-  }
-  return result;
+      return acc;
+    },
+    {} as Record<Square, string>,
+  );
+
+  return printGrid(values);
 }

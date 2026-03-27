@@ -1,11 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { parsePuzzle, printPuzzle } from "./parse";
+import { parsePuzzle, printPuzzle, printSquares } from "./parse";
 
 const input =
-  "....7..2.8.......6.1.2.5...9.54....8.........3....85.1...3.2.8.4.......9.7..6....";
+  "....7..2.8.......6.1.2.5...9.54....8....  \n.....3....85.1...3.2.8.4.......9.7..6....";
 
 const inputWithCandidates =
-  "....7..2.8....{1234}..6.1.2.5...9.54....8.....{5679}...3....85.1...3.2.8.4.......9.7..6....";
+  "{124}...7..2.8. ......6.1.2.5...9.54....8...  ..{5679}...3....85.1...3.2.8.4.......9.7..6....";
+
+const inputFormatted = `
+. . . | . 7 . | . 2 .
+8 . . | . . . | . . 6
+. 1 . | 2 . 5 | . . .
+------+-------+------
+9 . 5 | 4 . . | . . 8
+. . . | . . . | . . .
+3 . . | . . 8 | 5 . 1
+------+-------+------
+. . . | 3 . 2 | . 8 .
+4 . . | . . . | . . 9
+. 7 . | . 6 . | . . .
+`;
 
 describe("parse", () => {
   describe("parsePuzzle", () => {
@@ -94,13 +108,13 @@ describe("parse", () => {
         I9: new Set(),
       };
 
-      const result = parsePuzzle(input);
-      expect(result).toEqual(expected);
+      expect(parsePuzzle(input)).toEqual(expected);
+      expect(parsePuzzle(inputFormatted)).toEqual(expected);
     });
 
     it("should parse a sudoku string into a puzzle object with candidates", () => {
       const expected = {
-        A1: new Set(),
+        A1: new Set(["1", "2", "4"]),
         A2: new Set(),
         A3: new Set(),
         A4: new Set(),
@@ -114,7 +128,7 @@ describe("parse", () => {
         B3: new Set(),
         B4: new Set(),
         B5: new Set(),
-        B6: new Set(["1", "2", "3", "4"]),
+        B6: new Set(),
         B7: new Set(),
         B8: new Set(),
         B9: new Set(["6"]),
@@ -222,8 +236,28 @@ describe("parse", () => {
       expect(printed.trim()).toBe(expected.trim());
     });
 
-    it("should print a puzzle with cell IDs when requested", () => {
-      const puzzle = parsePuzzle(input);
+    it("should print a puzzle with candidates in a human-readable format", () => {
+      const puzzle = parsePuzzle(inputWithCandidates);
+      const expected = `
+{124} . . | . 7   .    | . 2 .
+  8   . . | . .   .    | . . 6
+  .   1 . | 2 .   5    | . . .
+----------+------------+------
+  9   . 5 | 4 .   .    | . . 8
+  .   . . | . . {5679} | . . .
+  3   . . | . .   8    | 5 . 1
+----------+------------+------
+  .   . . | 3 .   2    | . 8 .
+  4   . . | . .   .    | . . 9
+  .   7 . | . 6   .    | . . .
+`;
+      const printed = printPuzzle(puzzle);
+      expect(printed.trim()).toBe(expected.trim());
+    });
+  });
+
+  describe("printSquares", () => {
+    it("should print a puzzle with cell IDs", () => {
       const expected = `
 A1 A2 A3 | A4 A5 A6 | A7 A8 A9
 B1 B2 B3 | B4 B5 B6 | B7 B8 B9
@@ -237,8 +271,7 @@ G1 G2 G3 | G4 G5 G6 | G7 G8 G9
 H1 H2 H3 | H4 H5 H6 | H7 H8 H9
 I1 I2 I3 | I4 I5 I6 | I7 I8 I9
 `;
-      const printed = printPuzzle(puzzle, true);
-      console.log(printed);
+      const printed = printSquares();
       expect(printed.trim()).toBe(expected.trim());
     });
   });
