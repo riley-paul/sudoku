@@ -1,4 +1,4 @@
-import type { Digit, Row, Square, Unit } from "./types";
+import type { Digit, Grid, Row, Square, Unit } from "./types";
 import { cross } from "./utils";
 
 export const ROWS: Row[] = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
@@ -49,3 +49,8 @@ export const PEERS: Record<Square, Set<Square>> = SQUARES.reduce(
   },
   {} as Record<Square, Set<Square>>,
 );
+
+export const STARTING_GRID: Grid = SQUARES.reduce((acc, val) => {
+  acc[val] = new Set(COLS);
+  return acc;
+}, {} as Grid);
