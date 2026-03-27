@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parsePuzzle, printPuzzle, printSideBySide } from "./parse";
-import { constrain, isSolution } from "./solve";
+import { constrain, isSolution, search } from "./solve";
 
 describe("solve", () => {
   describe("isSolution", () => {
@@ -114,9 +114,6 @@ describe("solve", () => {
         . . .|. 8 .|. 7 9 `,
       );
       const constrained = constrain(puzzle);
-
-      console.log(printSideBySide([puzzle, constrained]));
-
       expect(isSolution(constrained, puzzle)).toBe(true);
     });
 
@@ -139,11 +136,48 @@ describe("solve", () => {
         `);
 
       const constrained = constrain(puzzle);
-
-      console.log(printSideBySide([puzzle, constrained]));
-
       expect(isSolution(constrained, puzzle)).toBe(false);
       expect(constrained).toEqual(partialSolution);
     });
+  });
+
+  describe("search", () => {
+    it("should solve challenging puzzle", () => {
+      const puzzle = parsePuzzle(`
+        4 . .|. . .|8 . 5
+        . 3 .|. . .|. . .
+        . . .|7 . .|. . .
+        -----+-----+-----
+        . 2 .|. . .|. 6 .
+        . . .|. 8 .|4 . .
+        . . .|. 1 .|. . .
+        -----+-----+-----
+        . . .|6 . 3|. 7 .
+        5 . .|2 . .|. . .
+        1 . 4|. . .|. . .
+        `);
+      const puzzleSolution = parsePuzzle(`
+        4 1 7|3 6 9|8 2 5
+        6 3 2|1 5 8|9 4 7
+        9 5 8|7 2 4|3 1 6
+        -----+-----+-----
+        8 2 5|4 3 7|1 6 9
+        7 9 1|5 8 6|4 3 2
+        3 4 6|9 1 2|7 5 8
+        -----+-----+-----
+        2 8 9|6 4 3|5 7 1
+        5 7 3|2 9 1|6 8 4
+        1 6 4|8 7 5|2 9 3
+        `);
+
+      const solution = search(constrain(puzzle));
+
+      console.log(printSideBySide([puzzle, solution]));
+
+      expect(isSolution(solution, puzzle)).toBe(true);
+      expect(solution).toEqual(puzzleSolution);
+    });
+
+    it("should solve top 95 puzzles", async () => {});
   });
 });

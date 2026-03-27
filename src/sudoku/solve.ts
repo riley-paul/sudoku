@@ -1,4 +1,5 @@
 import { ALL_UNITS, PEERS, SQUARES, STARTING_GRID, UNITS } from "./const";
+import { printPuzzle } from "./parse";
 import type { Digit, DigitSet, Grid, Square } from "./types";
 
 export function isSolution(solution: Grid | null, puzzle: Grid): boolean {
@@ -38,7 +39,7 @@ function fill(grid: Grid, s: Square, d: Digit): Grid | null {
   if (isAssigned) return grid;
 
   // Eliminate all other values (except d) from grid[s]
-  const eliminatedSuccessfully = grid[s].values().every((d2) => {
+  const eliminatedSuccessfully = [...grid[s]].every((d2) => {
     if (d2 !== d) return eliminate(grid, s, d2);
     return true;
   });
@@ -93,7 +94,9 @@ export function search(grid: Grid | null): Grid | null {
   if (!grid) return null;
 
   const unsolvedSquares = SQUARES.filter((s) => grid[s].size > 1);
-  if (unsolvedSquares.length === 0) return grid; // Solved!
+  if (unsolvedSquares.length === 0) {
+    return isSolution(grid, grid) ? grid : null;
+  }
 
   // choose the square with the fewest possibilities
   const s = unsolvedSquares.reduce((a, b) =>

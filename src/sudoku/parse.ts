@@ -104,8 +104,8 @@ export function printPuzzle(puzzle: Grid): string {
   return printGrid(values);
 }
 
-export function printSideBySide(puzzles: Grid[]): string {
-  const grids = puzzles.map(printPuzzle);
+export function printSideBySide(puzzles: Array<Grid | null>): string {
+  const grids = puzzles.filter((i) => i !== null).map(printPuzzle);
   const maxHeight = Math.max(...grids.map((g) => g.split("\n").length));
 
   let result = "";
