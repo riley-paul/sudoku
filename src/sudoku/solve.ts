@@ -1,21 +1,32 @@
-import { PEERS, SQUARES, STARTING_GRID, UNITS } from "./const";
+import { ALL_UNITS, PEERS, SQUARES, STARTING_GRID, UNITS } from "./const";
 import type { Digit, DigitSet, Grid, Square } from "./types";
 
-// function isSolution(solution: Grid, puzzle: Grid): boolean {
-//   return SQUARES.every((s) => solution[s].isSubsetOf(puzzle[s]));
-// }
+export function isSolution(solution: Grid | null, puzzle: Grid): boolean {
+  if (!solution) return false;
+
+  const solutionContainsPuzzle = SQUARES.every((s) =>
+    solution[s].isSupersetOf(puzzle[s]),
+  );
+  const eachSquareHasOneDigit = SQUARES.every((s) => solution[s].size === 1);
+  const eachUnitIsValid = ALL_UNITS.every((unit) => {
+    const digitsInUnit: DigitSet = new Set(
+      unit.map((s) => [...solution[s]][0]),
+    );
+    return digitsInUnit.size === 9;
+  });
+
+  return solutionContainsPuzzle && eachSquareHasOneDigit && eachUnitIsValid;
+}
 
 /**
  * Propogate constraints on a copy of grid to yield a new constrained grid
- * @param grid
- * @returns
  */
-function constrain(grid: Grid): Grid {
+export function constrain(grid: Grid): Grid {
   const result: Grid = { ...STARTING_GRID };
   SQUARES.forEach((s) => {
     const digits = grid[s];
     if (digits.size === 1) {
-      const d = digits.keys().next().value!;
+      const [d] = [...digits];
       fill(result, s, d);
     }
   });
@@ -24,9 +35,6 @@ function constrain(grid: Grid): Grid {
 
 /**
  * Eleminate all the other values (except d) from grid[s]
- * @param grid
- * @param s
- * @param d
  */
 function fill(grid: Grid, s: Square, d: Digit): Grid | null {
   // Check if d is already filled in s
@@ -45,10 +53,6 @@ function fill(grid: Grid, s: Square, d: Digit): Grid | null {
 
 /**
  * Eliminate d from grid[s]; implement the two constraint properties
- * @param grid
- * @param s
- * @param d
- * @returns
  */
 function eliminate(grid: Grid, s: Square, d: Digit): Grid | null {
   if (!grid[s].has(d)) return grid;
@@ -77,4 +81,28 @@ function eliminate(grid: Grid, s: Square, d: Digit): Grid | null {
   });
 
   return grid;
+}
+
+/**
+ * Depth first search with constrain propagation to find a solution.
+ */
+export function search(grid: Grid | null): Grid | null {
+  if (!grid) return null;
+
+  const unsolvedSquares = SQUARES.filter((s) => grid[s].size > 1);
+  if (unsolvedSquares.length === 0) return grid; // Solved!
+
+  // choose the square with the fewest possibilities
+  const s = unsolvedSquares.reduce((a, b) =>
+    grid[a].size < grid[b].size ? a : b,
+  );
+
+  for (const d of grid[s]) {
+    // initiate constraint propagation and recursively search on the new grid
+    const newGrid = fill({ ...grid }, s, d);
+    const result = search(newGrid);
+    if (result) return result;
+  }
+
+  return null; // No solution found
 }
