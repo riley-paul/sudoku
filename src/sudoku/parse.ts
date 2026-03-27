@@ -103,3 +103,20 @@ export function printPuzzle(puzzle: Grid): string {
 
   return printGrid(values);
 }
+
+export function printSideBySide(puzzles: Grid[]): string {
+  const grids = puzzles.map(printPuzzle);
+  const maxHeight = Math.max(...grids.map((g) => g.split("\n").length));
+
+  let result = "";
+
+  for (let i = 0; i < maxHeight; i++) {
+    const rowParts = grids.map((g) => {
+      const rows = g.split("\n");
+      return rows[i] || " ".repeat(rows[0].length);
+    });
+    result += rowParts.join("   ") + "\n";
+  }
+
+  return result;
+}

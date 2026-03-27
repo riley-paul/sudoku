@@ -18,11 +18,9 @@ export function isSolution(solution: Grid | null, puzzle: Grid): boolean {
   return solutionContainsPuzzle && eachSquareHasOneDigit && eachUnitIsValid;
 }
 
-/**
- * Propogate constraints on a copy of grid to yield a new constrained grid
- */
+// Propogate constraints on a copy of grid to yield a new constrained grid
 export function constrain(grid: Grid): Grid {
-  const result: Grid = { ...STARTING_GRID };
+  const result: Grid = structuredClone(STARTING_GRID);
   SQUARES.forEach((s) => {
     const digits = grid[s];
     if (digits.size === 1) {
@@ -33,21 +31,19 @@ export function constrain(grid: Grid): Grid {
   return result;
 }
 
-/**
- * Eleminate all the other values (except d) from grid[s]
- */
+// Eleminate all the other values (except d) from grid[s]
 function fill(grid: Grid, s: Square, d: Digit): Grid | null {
   // Check if d is already filled in s
   const isAssigned = grid[s].size === 1 && grid[s].has(d);
   if (isAssigned) return grid;
 
   // Eliminate all other values (except d) from grid[s]
-  grid[s].values().forEach((d2) => {
-    if (d2 !== d) {
-      eliminate(grid, s, d2);
-    }
+  const eliminatedSuccessfully = grid[s].values().every((d2) => {
+    if (d2 !== d) return eliminate(grid, s, d2);
+    return true;
   });
 
+  if (eliminatedSuccessfully) return grid;
   return null;
 }
 
@@ -55,29 +51,36 @@ function fill(grid: Grid, s: Square, d: Digit): Grid | null {
  * Eliminate d from grid[s]; implement the two constraint properties
  */
 function eliminate(grid: Grid, s: Square, d: Digit): Grid | null {
+  // d has already been eliminated from s
   if (!grid[s].has(d)) return grid;
 
   grid[s].delete(d);
 
-  if (grid[s].size === 0) {
-    // contradiction: removed last value from square
-    return null;
-  } else if (grid[s].size === 1) {
-    // square has only one possible value, eliminate that value from its peers
-    const d2 = grid[s].keys().next().value!;
-    PEERS[s].forEach((s2) => {
-      eliminate(grid, s2, d2);
-    });
+  // removed last value from square
+  if (grid[s].size === 0) return null;
+
+  // square has only one possible value, eliminate that value from its peers
+  if (grid[s].size === 1) {
+    const [d2] = [...grid[s]];
+    const eliminatedSuccessfully = PEERS[s]
+      .values()
+      .every((s2) => eliminate(grid, s2, d2));
+    // cannot eliminate d2 from peers
+    if (!eliminatedSuccessfully) return null;
   }
 
   UNITS[s].forEach((unit) => {
-    const dplaces = unit.filter((s) => grid[s].has(d));
-    if (dplaces.length === 0) {
-      throw new Error("Contradiction: no place for this value");
-    } else if (dplaces.length === 1) {
+    const digitPlaces = unit.filter((s) => grid[s].has(d));
+    // no places for number
+    if (digitPlaces.length === 0) return null;
+
+    if (digitPlaces.length === 1) {
       // d can only be in one place in unit; assign it there
-      fill(grid, dplaces[0], d);
+      const successfullyFilled = fill(grid, digitPlaces[0], d);
+      if (!successfullyFilled) return null;
     }
+
+    // if (digitPlaces.length > 1) return null;
   });
 
   return grid;
@@ -99,7 +102,7 @@ export function search(grid: Grid | null): Grid | null {
 
   for (const d of grid[s]) {
     // initiate constraint propagation and recursively search on the new grid
-    const newGrid = fill({ ...grid }, s, d);
+    const newGrid = fill(structuredClone(grid), s, d);
     const result = search(newGrid);
     if (result) return result;
   }
