@@ -173,9 +173,6 @@ describe("solve", () => {
         `);
 
       const solution = search(constrain(puzzle));
-
-      console.log(printSideBySide([puzzle, solution]));
-
       expect(isSolution(solution, puzzle)).toBe(true);
       expect(solution).toEqual(puzzleSolution);
     });
