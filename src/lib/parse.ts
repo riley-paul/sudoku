@@ -1,4 +1,6 @@
+import { COLS, ROWS } from "./const";
 import type { Puzzle } from "./types";
+import { getSquare } from "./utils";
 
 /**
  * Parses a Sudoku puzzle from a string representation.
@@ -19,9 +21,6 @@ export function parsePuzzle(value: string): Puzzle {
     );
   }
 
-  const rows = "ABCDEFGHI";
-  const cols = "123456789";
-
   for (let i = 0; i < values.length; i++) {
     if (!/[1-9.]/.test(values[i])) {
       throw new Error(
@@ -29,11 +28,13 @@ export function parsePuzzle(value: string): Puzzle {
       );
     }
 
-    const row = rows[Math.floor(i / 9)];
-    const col = cols[i % 9];
-    const square = `${row}${col}` as keyof Puzzle;
+    const row = ROWS[Math.floor(i / 9)];
+    const col = COLS[i % 9];
+    const square = getSquare(row, col);
 
-    puzzle[square] = values[i] as Puzzle[typeof square];
+    const value = values[i];
+
+    puzzle[square] = value === "." ? null : (value as Puzzle[typeof square]);
   }
 
   return puzzle;
@@ -53,18 +54,16 @@ function setCharAt(str: string, index: number, chr: string): string {
  * @returns A string representation of the Sudoku grid.
  */
 export function printPuzzle(puzzle: Puzzle, printCell = false): string {
-  const rows = "ABCDEFGHI";
-  const cols = "123456789";
   let result = "";
 
   let rowSeparator = "-".repeat(printCell ? 30 : 21) + "\n";
   rowSeparator = setCharAt(rowSeparator, printCell ? 9 : 6, "+");
   rowSeparator = setCharAt(rowSeparator, printCell ? 20 : 14, "+");
 
-  for (const row of rows) {
+  for (const row of ROWS) {
     let rowStr = "";
-    for (const col of cols) {
-      const square = `${row}${col}` as keyof Puzzle;
+    for (const col of COLS) {
+      const square = getSquare(row, col);
       if (printCell) {
         rowStr += square + " ";
       } else {
