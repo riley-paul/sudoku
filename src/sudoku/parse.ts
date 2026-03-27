@@ -1,34 +1,35 @@
 import { COLS, ROWS, SQUARES } from "./const";
-import type { Digit, Puzzle } from "./types";
+import type { DigitSet, Grid } from "./types";
 import { getSquare } from "./utils";
 
 /**
  * Parses a Sudoku puzzle from a string representation.
- * The input string should be exactly 81 characters long, where each character represents a cell in the Sudoku grid.
  * Digits 1-9 represent given values, and dots (.) represent empty cells.
+ * Digits within curly braces ({}) can be used to indicate candidate values for a cell.
  *
  * @param value - The string representation of the Sudoku puzzle.
  * @returns A Puzzle object representing the parsed Sudoku grid.
  * @throws Will throw an error if the input string is not exactly 81 characters long or contains invalid characters.
  */
-export function parsePuzzle(value: string): Puzzle {
-  const values = value.split("");
-  const puzzle: Puzzle = {} as Puzzle;
+export function parsePuzzle(picture: string): Grid {
+  const values = picture.match(/[.1-9]|[{][1-9]+[}]/g) || [];
 
   if (values.length !== 81) {
     throw new Error(
-      "Invalid puzzle string: must be exactly 81 characters long",
+      `Invalid puzzle string: must be exactly 81 characters long (found ${values.length} valid characters)`,
     );
   }
 
-  for (let i = 0; i < values.length; i++) {
-    if (!/[1-9.]/.test(values[i])) {
-      throw new Error(
-        `Invalid character at position ${i}: must be a digit 1-9 or a dot for empty squares`,
-      );
-    }
+  const puzzle: Grid = SQUARES.reduce((acc, val) => {
+    acc[val] = new Set();
+    return acc;
+  }, {} as Grid);
 
-    puzzle[SQUARES[i]] = values[i] === "." ? null : (values[i] as Digit);
+  for (let i = 0; i < values.length; i++) {
+    console.log(values[i]);
+    const digits = new Set(values[i].match(/[1-9]/g) || []) as DigitSet;
+
+    puzzle[SQUARES[i]] = digits;
   }
 
   return puzzle;
@@ -47,7 +48,7 @@ function setCharAt(str: string, index: number, chr: string): string {
  * @param printCell - If true, the output will include square IDs instead of values. Defaults to false.
  * @returns A string representation of the Sudoku grid.
  */
-export function printPuzzle(puzzle: Puzzle, printCell = false): string {
+export function printPuzzle(puzzle: Grid, printCell = false): string {
   let result = "";
 
   let rowSeparator = "-".repeat(printCell ? 30 : 21) + "\n";
