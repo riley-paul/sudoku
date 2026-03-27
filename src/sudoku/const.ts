@@ -1,15 +1,5 @@
 import type { Digit, Row, Square, Unit } from "./types";
-import { getSquare } from "./utils";
-
-const cross = (rows: Row[], cols: Digit[]): Square[] => {
-  const squares: Square[] = [];
-  for (const r of rows) {
-    for (const c of cols) {
-      squares.push(getSquare(r, c));
-    }
-  }
-  return squares;
-};
+import { cross } from "./utils";
 
 export const ROWS: Row[] = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
 export const COLS: Digit[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -42,4 +32,20 @@ export const UNITS: Record<Square, Unit[]> = SQUARES.reduce(
     return acc;
   },
   {} as Record<Square, Unit[]>,
+);
+
+export const PEERS: Record<Square, Set<Square>> = SQUARES.reduce(
+  (acc, val) => {
+    const peers = new Set<Square>();
+    UNITS[val].forEach((unit) =>
+      unit.forEach((square) => {
+        if (square !== val) {
+          peers.add(square);
+        }
+      }),
+    );
+    acc[val] = peers;
+    return acc;
+  },
+  {} as Record<Square, Set<Square>>,
 );
