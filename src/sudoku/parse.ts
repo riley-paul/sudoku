@@ -86,13 +86,6 @@ export function printSquares(): string {
   return printGrid(values);
 }
 
-/**
- * Converts a Puzzle object into a human-readable string format.
- * The output string will display the Sudoku grid with optional square IDs.
- *
- * @param puzzle - The Puzzle object to be printed.
- * @returns A string representation of the Sudoku grid.
- */
 export function printPuzzle(puzzle: Grid): string {
   const values = SQUARES.reduce(
     (acc, val) => {
