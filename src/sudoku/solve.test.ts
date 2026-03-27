@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parsePuzzle, printSideBySide } from "./parse";
+import { parsePuzzle } from "./parse";
 import { constrain, isSolution, search } from "./solve";
 
 import puzzleDataTop95 from "./test-puzzles/top95.txt?raw";
@@ -178,7 +178,7 @@ describe("solve", () => {
     });
 
     it("should solve top 95 puzzles", async () => {
-      puzzleDataTop95.split("\n").forEach((line, index) => {
+      puzzleDataTop95.split("\n").forEach((line) => {
         const puzzle = parsePuzzle(line);
         const solution = search(constrain(puzzle));
         expect(isSolution(solution, puzzle)).toBe(true);

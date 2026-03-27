@@ -1,5 +1,4 @@
 import { ALL_UNITS, PEERS, SQUARES, STARTING_GRID, UNITS } from "./const";
-import { printPuzzle } from "./parse";
 import type { Digit, DigitSet, Grid, Square } from "./types";
 
 export function isSolution(solution: Grid | null, puzzle: Grid): boolean {
@@ -48,9 +47,7 @@ function fill(grid: Grid, s: Square, d: Digit): Grid | null {
   return null;
 }
 
-/**
- * Eliminate d from grid[s]; implement the two constraint properties
- */
+// Eliminate d from grid[s]; implement the two constraint properties
 function eliminate(grid: Grid, s: Square, d: Digit): Grid | null {
   // d has already been eliminated from s
   if (!grid[s].has(d)) return grid;
@@ -87,9 +84,7 @@ function eliminate(grid: Grid, s: Square, d: Digit): Grid | null {
   return grid;
 }
 
-/**
- * Depth first search with constrain propagation to find a solution.
- */
+// Depth first search with constrain propagation to find a solution.
 export function search(grid: Grid | null): Grid | null {
   if (!grid) return null;
 
