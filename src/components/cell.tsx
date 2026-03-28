@@ -27,7 +27,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectSquare(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-base font-extralight transition-all duration-200 ease-out md:text-2xl",
+        "relative size-fit cursor-pointer text-base font-extralight md:text-2xl",
         {
           "border-r border-r-gray-400": s.col === "3" || s.col === "6",
           "border-l border-l-gray-400": s.col === "4" || s.col === "7",
@@ -54,8 +54,7 @@ const Cell: React.FC<Props> = ({ id }) => {
             s.col !== "3" && s.col !== "6" && s.col !== "9",
         })}
       >
-        {s.value}
-        {/*{s.value ? s.value : <Notes notes={s.notes} />}*/}
+        {s.value ? s.value : <Notes notes={s.notes} />}
       </div>
     </button>
   );

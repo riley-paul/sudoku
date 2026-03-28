@@ -58,6 +58,8 @@ const useStore = create<State & Actions>()(
         const cell = state.squares[id];
         if (!cell || cell.given) return state; // Don't allow changes to given cells
 
+        // clear from notes of peers
+
         state.history.push(current(state.squares));
         state.squares[id] = {
           ...cell,
