@@ -1,10 +1,6 @@
-import { blurActiveElement } from "@/lib/helpers";
+import { blurActiveElement } from "@/lib/utils";
 import React from "react";
-import {
-  useHotkey,
-  useHotkeys,
-  type RegisterableHotkey,
-} from "@tanstack/react-hotkeys";
+import { useHotkeys, type RegisterableHotkey } from "@tanstack/react-hotkeys";
 
 import Cell from "./cell";
 import useStore from "@/lib/store";
@@ -84,7 +80,7 @@ const Board: React.FC = () => {
   );
 
   return (
-    <div className="grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">
+    <div className="bg-card grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">
       {SQUARES.flat().map((id) => (
         <Cell key={id} id={id} />
       ))}

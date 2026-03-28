@@ -4,7 +4,7 @@ import { EraserIcon } from "lucide-react";
 import useStore from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
 import { useHotkey } from "@tanstack/react-hotkeys";
-import { blurActiveElement } from "@/lib/helpers";
+import { blurActiveElement } from "@/lib/utils";
 
 const ClearButton: React.FC = () => {
   const { selectedSquare, clearSquare, selected } = useStore(

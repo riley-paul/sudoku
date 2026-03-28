@@ -4,7 +4,7 @@ import { immer } from "zustand/middleware/immer";
 import type { Squares } from "./types";
 import { gridToSquares } from "./transform";
 import type { Digit, Square } from "@/sudoku/types";
-import { COLS, EMPTY_PUZZLE_STRING, ROWS } from "@/sudoku/const";
+import { COLS, EMPTY_PUZZLE_STRING, PEERS, ROWS } from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
 import { parseGrid } from "@/sudoku/parse";
 
@@ -15,6 +15,7 @@ type State = {
   selectedSquare: Square;
   history: Squares[];
   entryMode: "value" | "note";
+  strikes: number;
 };
 
 const initialState: State = {
@@ -22,6 +23,7 @@ const initialState: State = {
   selectedSquare: "E5",
   history: [],
   entryMode: "value",
+  strikes: 0,
 };
 
 type Actions = {
@@ -58,23 +60,29 @@ const useStore = create<State & Actions>()(
     setSquareValue: (id, value) =>
       set((state) => {
         const cell = state.squares[id];
-        if (!cell || cell.given) return state; // Don't allow changes to given cells
-
-        // clear from notes of peers
+        if (!cell || cell.given) return state; // don't allow changes to given cells
 
         state.history.push(current(state.squares));
         state.squares[id] = {
           ...cell,
           given: false,
           value,
-          notes: new Set(), // Clear notes when a value is set
+          notes: new Set(), // clear notes when a value is set
         };
+
+        // clear from notes of peers
+        PEERS[id].forEach((peerId) => {
+          state.squares[peerId].notes.delete(value);
+        });
+
+        // add strike if invalid move
+        console.log(state.squares);
       }),
 
     toggleSquareNote: (id, value) =>
       set((state) => {
         const cell = state.squares[id];
-        if (!cell || cell.given) return state; // Don't allow changes to given cells
+        if (!cell || cell.given) return state; // don't allow changes to given cells
 
         const newNotes = new Set(cell.notes);
         if (newNotes.has(value)) {

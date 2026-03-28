@@ -41,7 +41,7 @@ const Option: React.FC<{ val: Digit }> = ({ val }) => {
       variant="outline"
       className={cn("flex h-auto flex-col gap-0.5 px-0 py-0.5 md:py-1", {
         "opacity-0!": remainingValues <= 0,
-        "bg-accent/70 hover:bg-accent/50": isNoteMode,
+        "bg-gray-100 hover:bg-gray-200": isNoteMode,
       })}
       disabled={remainingValues <= 0}
       onClick={handleClick}
