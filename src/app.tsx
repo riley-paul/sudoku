@@ -6,9 +6,11 @@ import useStore from "./lib/store";
 import Options from "./components/options";
 import ClearButton from "./components/controls/clear-button";
 import { ALLOWED_STRIKES } from "./lib/const";
-import GameOver from "./components/game-over";
+import GameOver from "./components/screens/game-over";
 import NewGameButton from "./components/controls/new-game-button";
 import { TooltipProvider } from "./components/ui/tooltip";
+import { isPuzzleComplete } from "./lib/helpers";
+import GameWon from "./components/screens/game-won";
 
 const App: React.FC = () => {
   const newGame = useStore((s) => s.newGame);
@@ -18,7 +20,9 @@ const App: React.FC = () => {
   }, [newGame]);
 
   const strikes = useStore((s) => s.strikes);
+  const hasWon = useStore((s) => isPuzzleComplete(s.squares));
 
+  if (hasWon) return <GameWon />;
   if (strikes >= 3) return <GameOver />;
 
   return (

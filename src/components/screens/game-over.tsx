@@ -8,7 +8,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { RotateCcwIcon, SkullIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import useStore from "@/lib/store";
 
 const GameOver: React.FC = () => {
