@@ -16,7 +16,7 @@ const GameOver: React.FC = () => {
   return (
     <Empty>
       <EmptyHeader>
-        <EmptyMedia className="bg-destructive/10 text-destructive rounded-full p-2">
+        <EmptyMedia className="bg-destructive/10 text-destructive rounded-full p-3">
           <SkullIcon className="size-10" />
         </EmptyMedia>
         <EmptyTitle>GAME OVER</EmptyTitle>
