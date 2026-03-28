@@ -21,12 +21,6 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const newGame = useStore((s) => s.newGame);
-
-  useEffect(() => {
-    newGame();
-  }, [newGame]);
-
   useHotkey("Mod+Shift+S", () => {
     const { squares } = useStore.getState();
     const grid = squaresToGrid(squares);

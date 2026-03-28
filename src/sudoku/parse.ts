@@ -34,6 +34,15 @@ export function parseGrid(picture: string): Grid {
   return puzzle;
 }
 
+export function stringifyGrid(grid: Grid): string {
+  return SQUARES.map((square) => {
+    const digits = [...grid[square]];
+    if (digits.length === 0) return ".";
+    if (digits.length === 1) return digits[0];
+    return "{" + digits.join("") + "}";
+  }).join("");
+}
+
 export function printSudoku(grid: Record<Square, string>): string {
   let result = "";
 

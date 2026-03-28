@@ -49,6 +49,8 @@ const Board: React.FC = () => {
       ),
     );
 
+  const entryMode = useStore((s) => s.entryMode);
+
   useHotkeys(
     moveHotKeys.map(({ key, direction }) => ({
       hotkey: key,
@@ -64,7 +66,8 @@ const Board: React.FC = () => {
       hotkey: key,
       callback: () => {
         blurActiveElement();
-        setSquareValue(selectedSquare, value);
+        if (entryMode === "value") setSquareValue(selectedSquare, value);
+        if (entryMode === "note") toggleSquareNote(selectedSquare, value);
       },
     })),
   );
