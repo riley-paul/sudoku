@@ -78,7 +78,7 @@
   --destructive-foreground: var(--color-gray-100);
 
   --border: var(--color-gray-300);
-  --input: var(--color-gray-100);
+  --input: var(--color-gray-300);
   --ring: var(--color-sky-600);
 
   --sidebar: var(--color-gray-50);

@@ -19,7 +19,6 @@ const EntryModeToggle: React.FC = () => {
   return (
     <Label className="text-muted-foreground text-xs">
       <Switch
-        size="sm"
         checked={entryMode === "note"}
         onCheckedChange={toggleEntryMode}
       />

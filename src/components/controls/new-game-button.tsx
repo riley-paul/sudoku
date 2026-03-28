@@ -35,8 +35,9 @@ const NewGameButton: React.FC = () => {
           New game
           <KeyboardShortcut>{formatForDisplay("Alt+N")}</KeyboardShortcut>
         </TooltipContent>
+
         <TooltipTrigger>
-          <AlertDialogTrigger asChild>
+          <AlertDialogTrigger>
             <Button variant="ghost" size="icon-lg">
               <RotateCcwIcon />
             </Button>
