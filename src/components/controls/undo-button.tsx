@@ -16,7 +16,7 @@ const UndoButton: React.FC = () => {
   useHotkey("Mod+Z", undo);
 
   return (
-    <Button variant="ghost" size="icon" onClick={undo} disabled={!canUndo}>
+    <Button variant="ghost" size="icon-lg" onClick={undo} disabled={!canUndo}>
       <UndoIcon />
     </Button>
   );

@@ -6,6 +6,7 @@ import useStore from "./lib/store";
 import { parseGrid, printGrid } from "./sudoku/parse";
 import Options from "./components/options";
 import { gridToSquares } from "./lib/transform";
+import ClearButton from "./components/controls/clear-button";
 
 type Props = { puzzle: string };
 
@@ -26,7 +27,10 @@ const App: React.FC<Props> = ({ puzzle }) => {
       <Board />
       <footer className="flex items-center justify-between gap-2">
         <EntryModeToggle />
-        <UndoButton />
+        <section className="flex items-center gap-2">
+          <ClearButton />
+          <UndoButton />
+        </section>
       </footer>
       <Options />
     </div>

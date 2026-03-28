@@ -83,11 +83,6 @@ const Board: React.FC = () => {
     })),
   );
 
-  useHotkey("Backspace", () => {
-    blurActiveElement();
-    setSquareValue(selectedSquare, null);
-  });
-
   return (
     <div className="grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">
       {SQUARES.flat().map((id) => (

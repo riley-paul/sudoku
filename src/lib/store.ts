@@ -25,8 +25,9 @@ const initialState: State = {
 };
 
 type Actions = {
-  setSquareValue: (id: Square, value: Digit | null) => void;
+  setSquareValue: (id: Square, value: Digit) => void;
   toggleSquareNote: (id: Square, value: Digit) => void;
+  clearSquare: (id: Square) => void;
 
   selectSquare: (id: Square) => void;
   moveSelection: (direction: "up" | "down" | "left" | "right") => void;
@@ -94,6 +95,19 @@ const useStore = create<State & Actions>()(
     selectSquare: (id) =>
       set((state) => {
         state.selectedSquare = id;
+      }),
+
+    clearSquare: (id) =>
+      set((state) => {
+        const cell = state.squares[id];
+        if (!cell || cell.given) return state; // Don't allow changes to given cells
+
+        state.history.push(current(state.squares));
+        state.squares[id] = {
+          ...cell,
+          value: null,
+          notes: new Set(),
+        };
       }),
 
     moveSelection: (direction) =>
