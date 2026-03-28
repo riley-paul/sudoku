@@ -11,6 +11,9 @@ import NewGameButton from "./components/controls/new-game-button";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { isPuzzleComplete } from "./lib/helpers";
 import GameWon from "./components/screens/game-won";
+import { useHotkey } from "@tanstack/react-hotkeys";
+import { gridToSquares, squaresToGrid } from "./lib/transform";
+import { constrain, search } from "./sudoku/solve";
 
 const App: React.FC = () => {
   const newGame = useStore((s) => s.newGame);
@@ -21,6 +24,15 @@ const App: React.FC = () => {
 
   const strikes = useStore((s) => s.strikes);
   const hasWon = useStore((s) => isPuzzleComplete(s.squares));
+
+  useHotkey("Mod+Shift+S", () => {
+    const { squares } = useStore.getState();
+    const grid = squaresToGrid(squares);
+    const solution = search(constrain(grid));
+    if (solution) {
+      useStore.setState({ squares: gridToSquares(solution) });
+    }
+  });
 
   if (hasWon) return <GameWon />;
   if (strikes >= 3) return <GameOver />;
