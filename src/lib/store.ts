@@ -39,6 +39,8 @@ type Actions = {
 
   addHistory: () => void;
   undo: () => void;
+
+  newGame: () => Promise<void>;
 };
 
 const useStore = create<State & Actions>()(
@@ -155,6 +157,17 @@ const useStore = create<State & Actions>()(
 
         state.selectedSquare = getSquare(newRow, newCol);
       }),
+
+    newGame: async () => {
+      const response = await fetch("/api/random-puzzle");
+      const puzzleString = await response.text();
+
+      set((state) => ({
+        ...state,
+        ...initialState,
+        squares: gridToSquares(parseGrid(puzzleString)),
+      }));
+    },
   })),
 );
 

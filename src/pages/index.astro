@@ -1,15 +1,10 @@
 ---
 import App from "@/app";
 import RootLayout from "./_root-layout.astro";
-
-import puzzleData from "@/sudoku/test-puzzles/top95.txt?raw";
-
-const puzzles = puzzleData.split("\n").filter((line) => line.trim().length > 0);
-const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
 ---
 
 <RootLayout>
   <main class="flex h-screen w-screen justify-center p-6">
-    <App puzzle={randomPuzzle} client:load />
+    <App client:load />
   </main>
 </RootLayout>

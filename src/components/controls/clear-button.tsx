@@ -1,10 +1,12 @@
 import React, { useMemo } from "react";
 import { Button } from "../ui/button";
-import { EraserIcon } from "lucide-react";
+import { DeleteIcon, EraserIcon } from "lucide-react";
 import useStore from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
-import { useHotkey } from "@tanstack/react-hotkeys";
+import { formatForDisplay, useHotkey } from "@tanstack/react-hotkeys";
 import { blurActiveElement } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import KeyboardShortcut from "../ui/keyboard-shortcut";
 
 const ClearButton: React.FC = () => {
   const { selectedSquare, clearSquare, selected } = useStore(
@@ -28,14 +30,22 @@ const ClearButton: React.FC = () => {
   useHotkey("Backspace", handleClear);
 
   return (
-    <Button
-      variant="ghost"
-      size="icon-lg"
-      onClick={handleClear}
-      disabled={!canClear}
-    >
-      <EraserIcon />
-    </Button>
+    <Tooltip>
+      <TooltipContent>
+        Clear
+        <KeyboardShortcut>{formatForDisplay("Backspace")}</KeyboardShortcut>
+      </TooltipContent>
+      <TooltipTrigger>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          onClick={handleClear}
+          disabled={!canClear}
+        >
+          <EraserIcon />
+        </Button>
+      </TooltipTrigger>
+    </Tooltip>
   );
 };
 

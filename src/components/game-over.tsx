@@ -7,10 +7,12 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { RotateCwIcon, SkullIcon } from "lucide-react";
+import { RotateCcwIcon, SkullIcon } from "lucide-react";
 import { Button } from "./ui/button";
+import useStore from "@/lib/store";
 
 const GameOver: React.FC = () => {
+  const newGame = useStore((s) => s.newGame);
   return (
     <Empty>
       <EmptyHeader>
@@ -24,8 +26,8 @@ const GameOver: React.FC = () => {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button onClick={() => window.location.reload()}>
-          <RotateCwIcon />
+        <Button onClick={newGame}>
+          <RotateCcwIcon />
           New game
         </Button>
       </EmptyContent>
