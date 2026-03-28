@@ -4,12 +4,13 @@ import { immer } from "zustand/middleware/immer";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { Squares } from "./types";
-import { gridToSquares, squaresToGrid } from "./transform";
+import { gridToSquares } from "./transform";
 import type { Digit, Square } from "@/sudoku/types";
 import { COLS, EMPTY_PUZZLE_STRING, PEERS, ROWS } from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
-import { parseGrid, stringifyGrid } from "@/sudoku/parse";
+import { parseGrid } from "@/sudoku/parse";
 import { isInvalidMove } from "./helpers";
+import { parseSquares, stringifySquares } from "./persist";
 
 enableMapSet();
 
@@ -17,11 +18,9 @@ const customStorage = createJSONStorage(() => localStorage, {
   reviver: (key, value) => {
     switch (key) {
       case "squares":
-        return gridToSquares(parseGrid(value as string));
+        return parseSquares(value as string);
       case "history":
-        return (value as string[]).map((gridStr) =>
-          gridToSquares(parseGrid(gridStr)),
-        );
+        return (value as string[]).map(parseSquares);
       default:
         return value;
     }
@@ -29,11 +28,9 @@ const customStorage = createJSONStorage(() => localStorage, {
   replacer: (key, value) => {
     switch (key) {
       case "squares":
-        return stringifyGrid(squaresToGrid(value as Squares));
+        return stringifySquares(value as Squares);
       case "history":
-        return (value as Squares[]).map((squares) =>
-          stringifyGrid(squaresToGrid(squares)),
-        );
+        return (value as Squares[]).map(stringifySquares);
       default:
         return value;
     }
@@ -85,7 +82,6 @@ const useStore = create<State & Actions>()(
       undo: () =>
         set((state) => {
           if (state.history.length === 0) return;
-
           const previousCells = state.history.pop();
           state.squares = previousCells!;
         }),
