@@ -34,7 +34,7 @@ export function parseGrid(picture: string): Grid {
   return puzzle;
 }
 
-export function printGrid(grid: Record<Square, string>): string {
+export function printSudoku(grid: Record<Square, string>): string {
   let result = "";
 
   const colWidths: Record<Digit, number> = COLS.reduce(
@@ -83,10 +83,10 @@ export function printSquares(): string {
     {} as Record<Square, string>,
   );
 
-  return printGrid(values);
+  return printSudoku(values);
 }
 
-export function printPuzzle(puzzle: Grid): string {
+export function printGrid(puzzle: Grid): string {
   const values = SQUARES.reduce(
     (acc, val) => {
       if (puzzle[val].size === 1) {
@@ -101,11 +101,11 @@ export function printPuzzle(puzzle: Grid): string {
     {} as Record<Square, string>,
   );
 
-  return printGrid(values);
+  return printSudoku(values);
 }
 
-export function printSideBySide(puzzles: Array<Grid | null>): string {
-  const grids = puzzles.filter((i) => i !== null).map(printPuzzle);
+export function printGrids(puzzles: Array<Grid | null>): string {
+  const grids = puzzles.filter((i) => i !== null).map(printGrid);
   const maxHeight = Math.max(...grids.map((g) => g.split("\n").length));
 
   let result = "";

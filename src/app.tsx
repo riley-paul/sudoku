@@ -2,30 +2,23 @@ import React, { useEffect } from "react";
 import EntryModeToggle from "./components/controls/entry-mode-toggle";
 import Board from "./components/board";
 import UndoButton from "./components/controls/undo-button";
-import type { Squares } from "./lib/types";
 import useStore from "./lib/store";
-import { SQUARES } from "./sudoku/const";
-import type { Square } from "./sudoku/types";
-import { printGrid } from "./sudoku/parse";
+import { parseGrid, printGrid } from "./sudoku/parse";
 import Options from "./components/options";
+import { gridToSquares } from "./lib/transform";
 
-type Props = { squares: Squares };
+type Props = { puzzle: string };
 
-const App: React.FC<Props> = ({ squares }) => {
+const App: React.FC<Props> = ({ puzzle }) => {
   useEffect(() => {
-    const grid = SQUARES.reduce(
-      (acc, val) => {
-        acc[val] = squares[val].value?.toString() || "";
-        return acc;
-      },
-      {} as Record<Square, string>,
-    );
+    const grid = parseGrid(puzzle);
+    const squares = gridToSquares(grid);
 
     console.log("Setting squares from server");
     console.log(printGrid(grid));
 
     useStore.setState({ squares });
-  }, [squares]);
+  }, [puzzle]);
 
   return (
     <div className="flex flex-col gap-4">

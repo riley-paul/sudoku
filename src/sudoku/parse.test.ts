@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseGrid, printPuzzle, printSquares } from "./parse";
+import { parseGrid, printGrid, printSquares } from "./parse";
 
 const input =
   "....7..2.8.......6.1.2.5...9.54....8....  \n.....3....85.1...3.2.8.4.......9.7..6....";
@@ -233,7 +233,7 @@ describe("parse", () => {
     });
   });
 
-  describe("printPuzzle", () => {
+  describe("printGrid", () => {
     it("should print a puzzle in a human-readable format", () => {
       const puzzle = parseGrid(input);
       const expected = `
@@ -249,14 +249,14 @@ describe("parse", () => {
 4 . . | . . . | . . 9
 . 7 . | . 6 . | . . .
 `;
-      const printed = printPuzzle(puzzle);
+      const printed = printGrid(puzzle);
       expect(printed.trim()).toBe(expected.trim());
     });
 
     it("should print a puzzle with candidates in a human-readable format", () => {
       const puzzle = parseGrid(inputWithCandidates);
 
-      const printed = printPuzzle(puzzle);
+      const printed = printGrid(puzzle);
       expect(printed.trim()).toBe(inputFormattedWithCandidates.trim());
     });
   });

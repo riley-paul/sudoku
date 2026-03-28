@@ -3,17 +3,13 @@ import App from "@/app";
 import RootLayout from "./_root-layout.astro";
 
 import puzzleData from "@/sudoku/test-puzzles/top95.txt?raw";
-import { gridToSquares } from "@/lib/transform";
-import { parseGrid } from "@/sudoku/parse";
 
 const puzzles = puzzleData.split("\n").filter((line) => line.trim().length > 0);
 const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
-
-const squares = gridToSquares(parseGrid(randomPuzzle));
 ---
 
 <RootLayout>
   <main class="flex h-screen w-screen justify-center p-6">
-    <App squares={squares} client:load />
+    <App puzzle={randomPuzzle} client:load />
   </main>
 </RootLayout>
