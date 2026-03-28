@@ -7,6 +7,8 @@ import { parseGrid, printGrid } from "./sudoku/parse";
 import Options from "./components/options";
 import { gridToSquares } from "./lib/transform";
 import ClearButton from "./components/controls/clear-button";
+import { ALLOWED_STRIKES } from "./lib/const";
+import GameOver from "./components/game-over";
 
 type Props = { puzzle: string };
 
@@ -21,10 +23,21 @@ const App: React.FC<Props> = ({ puzzle }) => {
     useStore.setState({ squares });
   }, [puzzle]);
 
+  const strikes = useStore((s) => s.strikes);
+
+  if (strikes >= 3) return <GameOver />;
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-5xl font-extrabold tracking-tight">Sudoku</h1>
-      <Board />
+      <div className="flex flex-col gap-1">
+        <header className="text-muted-foreground text-xs">
+          <span>
+            Mistakes: {strikes}/{ALLOWED_STRIKES}
+          </span>
+        </header>
+        <Board />
+      </div>
       <footer className="flex items-center justify-between gap-2">
         <EntryModeToggle />
         <section className="flex items-center gap-2">
