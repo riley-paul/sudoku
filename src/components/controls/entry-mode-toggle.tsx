@@ -3,7 +3,7 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import useStore from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
-import { useHotkey } from "@tanstack/react-hotkeys";
+import { formatForDisplay, useHotkey } from "@tanstack/react-hotkeys";
 import KeyboardShortcut from "../ui/keyboard-shortcut";
 
 const EntryModeToggle: React.FC = () => {
@@ -24,7 +24,7 @@ const EntryModeToggle: React.FC = () => {
         onCheckedChange={toggleEntryMode}
       />
       Note mode
-      <KeyboardShortcut>N</KeyboardShortcut>
+      <KeyboardShortcut>{formatForDisplay("N")}</KeyboardShortcut>
     </Label>
   );
 };
