@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parsePuzzle, printPuzzle, printSquares } from "./parse";
+import { parseGrid, printPuzzle, printSquares } from "./parse";
 
 const input =
   "....7..2.8.......6.1.2.5...9.54....8....  \n.....3....85.1...3.2.8.4.......9.7..6....";
@@ -204,22 +204,22 @@ const inputFormattedWithCandidates = `
 `;
 
 describe("parse", () => {
-  describe("parsePuzzle", () => {
+  describe("parseGrid", () => {
     it("should parse a sudoku string into a puzzle object", () => {
-      expect(parsePuzzle(input)).toEqual(expected);
-      expect(parsePuzzle(inputFormatted)).toEqual(expected);
-      expect(parsePuzzle(inputFormattedWithCandidates)).toEqual(
+      expect(parseGrid(input)).toEqual(expected);
+      expect(parseGrid(inputFormatted)).toEqual(expected);
+      expect(parseGrid(inputFormattedWithCandidates)).toEqual(
         expectedWithCandidates,
       );
     });
 
     it("should parse a sudoku string into a puzzle object with candidates", () => {
-      const result = parsePuzzle(inputWithCandidates);
+      const result = parseGrid(inputWithCandidates);
       expect(result).toEqual(expectedWithCandidates);
     });
 
     it("should throw an error if the input string is not 81 characters long", () => {
-      expect(() => parsePuzzle("short")).toThrow(
+      expect(() => parseGrid("short")).toThrow(
         "Invalid puzzle string: must be exactly 81 characters long (found 0 valid characters)",
       );
     });
@@ -227,7 +227,7 @@ describe("parse", () => {
     it("should throw an error if the input string contains invalid characters", () => {
       const testString =
         "....7..2.8....z..6.1.2.5...9.54....8.........3....85.1...3.2.8.4.......9.7..6....";
-      expect(() => parsePuzzle(testString)).toThrow(
+      expect(() => parseGrid(testString)).toThrow(
         "Invalid puzzle string: must be exactly 81 characters long (found 80 valid characters)",
       );
     });
@@ -235,7 +235,7 @@ describe("parse", () => {
 
   describe("printPuzzle", () => {
     it("should print a puzzle in a human-readable format", () => {
-      const puzzle = parsePuzzle(input);
+      const puzzle = parseGrid(input);
       const expected = `
 . . . | . 7 . | . 2 .
 8 . . | . . . | . . 6
@@ -254,7 +254,7 @@ describe("parse", () => {
     });
 
     it("should print a puzzle with candidates in a human-readable format", () => {
-      const puzzle = parsePuzzle(inputWithCandidates);
+      const puzzle = parseGrid(inputWithCandidates);
 
       const printed = printPuzzle(puzzle);
       expect(printed.trim()).toBe(inputFormattedWithCandidates.trim());

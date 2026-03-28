@@ -11,7 +11,7 @@ import { getSquare } from "./utils";
  * @returns A Puzzle object representing the parsed Sudoku grid.
  * @throws Will throw an error if the input string is not exactly 81 characters long or contains invalid characters.
  */
-export function parsePuzzle(picture: string): Grid {
+export function parseGrid(picture: string): Grid {
   const values = picture.match(/[.1-9]|[{][1-9]+[}]/g) || [];
 
   if (values.length !== 81) {

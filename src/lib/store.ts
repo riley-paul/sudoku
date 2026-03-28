@@ -2,10 +2,11 @@ import { current, enableMapSet } from "immer";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import type { Squares } from "./types";
-import { initSquares } from "./init";
+import { gridToSquares } from "./transform";
 import type { Digit, Square } from "@/sudoku/types";
-import { COLS, ROWS } from "@/sudoku/const";
+import { COLS, EMPTY_PUZZLE_STRING, ROWS } from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
+import { parseGrid } from "@/sudoku/parse";
 
 enableMapSet();
 
@@ -17,7 +18,7 @@ type State = {
 };
 
 const initialState: State = {
-  squares: initSquares(),
+  squares: gridToSquares(parseGrid(EMPTY_PUZZLE_STRING)),
   selectedSquare: "E5",
   history: [],
   entryMode: "value",

@@ -1,6 +1,8 @@
 import type { Digit, Grid, Row, Square, Unit } from "./types";
 import { cross } from "./utils";
 
+export const EMPTY_PUZZLE_STRING = ".".repeat(81);
+
 export const ROWS: Row[] = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
 export const COLS: Digit[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 export const SQUARES: Square[] = cross(ROWS, COLS);

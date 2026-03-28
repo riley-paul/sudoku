@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parsePuzzle } from "./parse";
+import { parseGrid } from "./parse";
 import { constrain, isSolution, search } from "./solve";
 
 import puzzleDataTop95 from "./test-puzzles/top95.txt?raw";
@@ -7,7 +7,7 @@ import puzzleDataTop95 from "./test-puzzles/top95.txt?raw";
 describe("solve", () => {
   describe("isSolution", () => {
     it("should return true for a solution", () => {
-      const solution = parsePuzzle(`
+      const solution = parseGrid(`
         5 3 4 | 6 7 8 | 9 1 2
         6 7 2 | 1 9 5 | 3 4 8
         1 9 8 | 3 4 2 | 5 6 7
@@ -20,7 +20,7 @@ describe("solve", () => {
         2 8 7 | 4 1 9 | 6 3 5
         3 4 5 | 2 8 6 | 1 7 9
         `);
-      const puzzle = parsePuzzle(`
+      const puzzle = parseGrid(`
         5 3 .|. 7 .|. . .
         6 . .|1 9 5|. . .
         . 9 8|. . .|. 6 .
@@ -38,7 +38,7 @@ describe("solve", () => {
     });
 
     it("should return false when solution differs from puzzle", () => {
-      const solution = parsePuzzle(`
+      const solution = parseGrid(`
         4 1 7|3 6 9|8 2 5
         6 3 2|1 5 8|9 4 7
         9 5 8|7 2 4|3 1 6
@@ -51,7 +51,7 @@ describe("solve", () => {
         5 7 3|2 9 1|6 8 4
         1 6 4|8 7 5|2 9 3
         `);
-      const puzzle = parsePuzzle(`
+      const puzzle = parseGrid(`
         5 3 .|. 7 .|. . .
         6 . .|1 9 5|. . .
         . 9 8|. . .|. 6 .
@@ -69,7 +69,7 @@ describe("solve", () => {
     });
 
     it("should return false when solution is invalid", () => {
-      const solution = parsePuzzle(`
+      const solution = parseGrid(`
         5 3 4 | 6 7 8 | 9 2 1
         6 7 2 | 1 9 5 | 3 4 8
         1 9 8 | 3 4 2 | 5 6 7
@@ -82,7 +82,7 @@ describe("solve", () => {
         2 8 7 | 4 1 9 | 6 3 5
         3 4 5 | 2 8 6 | 1 7 9
         `);
-      const puzzle = parsePuzzle(`
+      const puzzle = parseGrid(`
         5 3 .|. 7 .|. . .
         6 . .|1 9 5|. . .
         . 9 8|. . .|. 6 .
@@ -102,7 +102,7 @@ describe("solve", () => {
 
   describe("constrain", () => {
     it("should solve a simple puzzle with just contrain", () => {
-      const puzzle = parsePuzzle(
+      const puzzle = parseGrid(
         `5 3 .|. 7 .|. . .
         6 . .|1 9 5|. . .
         . 9 8|. . .|. 6 .
@@ -120,10 +120,10 @@ describe("solve", () => {
     });
 
     it("should not solve a complex puzzle with just contrain", () => {
-      const puzzle = parsePuzzle(`
+      const puzzle = parseGrid(`
         4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......
         `);
-      const partialSolution = parsePuzzle(`
+      const partialSolution = parseGrid(`
         4       {1679}   {12679} |  {139}     {2369}    {269}  |    8       {1239}      5
       {26789}      3     {1256789}| {14589}   {24569}   {245689}| {12679}    {1249}   {124679}
        {2689}   {15689}   {125689}|    7      {234569}  {245689}| {12369}   {12349}   {123469}
@@ -145,7 +145,7 @@ describe("solve", () => {
 
   describe("search", () => {
     it("should solve challenging puzzle", () => {
-      const puzzle = parsePuzzle(`
+      const puzzle = parseGrid(`
         4 . .|. . .|8 . 5
         . 3 .|. . .|. . .
         . . .|7 . .|. . .
@@ -158,7 +158,7 @@ describe("solve", () => {
         5 . .|2 . .|. . .
         1 . 4|. . .|. . .
         `);
-      const puzzleSolution = parsePuzzle(`
+      const puzzleSolution = parseGrid(`
         4 1 7|3 6 9|8 2 5
         6 3 2|1 5 8|9 4 7
         9 5 8|7 2 4|3 1 6
@@ -179,7 +179,7 @@ describe("solve", () => {
 
     it("should solve top 95 puzzles", async () => {
       puzzleDataTop95.split("\n").forEach((line) => {
-        const puzzle = parsePuzzle(line);
+        const puzzle = parseGrid(line);
         const solution = search(constrain(puzzle));
         expect(isSolution(solution, puzzle)).toBe(true);
       });

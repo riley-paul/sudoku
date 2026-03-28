@@ -3,12 +3,13 @@ import App from "@/app";
 import RootLayout from "./_root-layout.astro";
 
 import puzzleData from "@/sudoku/test-puzzles/top95.txt?raw";
-import { initSquares } from "@/lib/init";
+import { gridToSquares } from "@/lib/transform";
+import { parseGrid } from "@/sudoku/parse";
 
 const puzzles = puzzleData.split("\n").filter((line) => line.trim().length > 0);
 const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
 
-const squares = initSquares(randomPuzzle);
+const squares = gridToSquares(parseGrid(randomPuzzle));
 ---
 
 <RootLayout>
