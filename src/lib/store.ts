@@ -7,6 +7,7 @@ import type { Digit, Square } from "@/sudoku/types";
 import { COLS, EMPTY_PUZZLE_STRING, PEERS, ROWS } from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
 import { parseGrid } from "@/sudoku/parse";
+import { isInvalidMove } from "./helpers";
 
 enableMapSet();
 
@@ -62,6 +63,11 @@ const useStore = create<State & Actions>()(
         const cell = state.squares[id];
         if (!cell || cell.given) return state; // don't allow changes to given cells
 
+        // add strike if invalid move
+        if (isInvalidMove(state.squares, id, value)) {
+          state.strikes += 1;
+        }
+
         state.history.push(current(state.squares));
         state.squares[id] = {
           ...cell,
@@ -74,9 +80,6 @@ const useStore = create<State & Actions>()(
         PEERS[id].forEach((peerId) => {
           state.squares[peerId].notes.delete(value);
         });
-
-        // add strike if invalid move
-        console.log(state.squares);
       }),
 
     toggleSquareNote: (id, value) =>

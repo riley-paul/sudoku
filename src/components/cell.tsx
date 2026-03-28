@@ -3,7 +3,8 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import Notes from "./notes";
 import type { Square } from "@/sudoku/types";
-import { PEERS, SQUARES } from "@/sudoku/const";
+import { PEERS } from "@/sudoku/const";
+import { isInvalidMove } from "@/lib/helpers";
 
 type Props = { id: Square };
 
@@ -14,11 +15,7 @@ const Cell: React.FC<Props> = ({ id }) => {
   const isInvalid = useStore((s) => {
     const { value } = s.squares[id];
     if (value === null) return false;
-
-    const squaresWithValue = SQUARES.filter(
-      (square) => s.squares[square].value === value,
-    );
-    return squaresWithValue.some((i) => PEERS[id].has(i));
+    return isInvalidMove(s.squares, id, value);
   });
 
   const isPeer = PEERS[id].has(selected.id);
