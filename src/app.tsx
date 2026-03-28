@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useHotkey } from "@tanstack/react-hotkeys";
 
@@ -10,11 +10,16 @@ import { constrain, search } from "@/sudoku/solve";
 import GameOver from "@/components/screens/game-over";
 import GameWon from "@/components/screens/game-won";
 import Game from "@/components/screens/game";
+import Loading from "@/components/screens/loading";
+import { useIsClient } from "usehooks-ts";
 
 const AppContent: React.FC = () => {
   const strikes = useStore((s) => s.strikes);
   const hasWon = useStore((s) => isPuzzleComplete(s.squares));
 
+  const isClient = useIsClient();
+
+  if (!isClient) return <Loading />;
   if (hasWon) return <GameWon />;
   if (strikes >= 3) return <GameOver />;
   return <Game />;
