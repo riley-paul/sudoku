@@ -7,11 +7,13 @@ import type { Squares } from "./types";
 import { gridToSquares, squaresToGrid } from "./transform";
 import type { Digit, Square } from "@/sudoku/types";
 import {
+  ALL_UNITS,
   COLS,
   EMPTY_PUZZLE_STRING,
   PEERS,
   ROWS,
   SQUARES,
+  UNITS,
 } from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
 import { parseGrid } from "@/sudoku/parse";
@@ -96,7 +98,7 @@ const useStore = create<State & Actions>()(
           state.squares = previousCells!;
         }),
 
-      setSquareValue: (id, value) =>
+      setSquareValue: async (id, value) => {
         set((state) => {
           const cell = state.squares[id];
           if (!cell || cell.given) return state; // don't allow changes to given cells
@@ -106,6 +108,8 @@ const useStore = create<State & Actions>()(
             state.strikes += 1;
           }
 
+          const squaresSnapshot = current(state.squares);
+
           state.history.push(current(state.squares));
           state.squares[id] = {
             ...cell,
@@ -114,11 +118,47 @@ const useStore = create<State & Actions>()(
             notes: new Set(), // clear notes when a value is set
           };
 
+          // if completing a unit, highlight squares of unit
+          UNITS[id].forEach((unit) => {
+            const wasUnitComplete = unit.every((sq) => {
+              const c = squaresSnapshot[sq];
+              return c.value === c.solution;
+            });
+            const isUnitComplete = unit.every((sq) => {
+              const c = state.squares[sq];
+              return c.value === c.solution;
+            });
+            if (isUnitComplete && !wasUnitComplete) {
+              unit.forEach((sq) => state.highlightedSquares.add(sq));
+            }
+          });
+
+          // if completing a value family, highlight all squares of that value
+          const wasFamilyComplete =
+            SQUARES.filter((sq) => squaresSnapshot[sq].value === value)
+              .length === 9;
+          const isFamilyComplete =
+            SQUARES.filter((sq) => state.squares[sq].value === value).length ===
+            9;
+          if (isFamilyComplete && !wasFamilyComplete) {
+            SQUARES.forEach((sq) => {
+              if (state.squares[sq].value === value) {
+                state.highlightedSquares.add(sq);
+              }
+            });
+          }
+
           // clear from notes of peers
           PEERS[id].forEach((peerId) => {
             state.squares[peerId].notes.delete(value);
           });
-        }),
+        });
+
+        await new Promise((r) => setTimeout(r, 500));
+        set((state) => {
+          state.highlightedSquares = new Set();
+        });
+      },
 
       toggleSquareNote: (id, value) =>
         set((state) => {

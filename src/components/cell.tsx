@@ -10,6 +10,7 @@ type Props = { id: Square };
 
 const Cell: React.FC<Props> = ({ id }) => {
   const s = useStore((s) => s.squares[id]);
+  const isHighlighted = useStore((s) => s.highlightedSquares.has(id));
   const selected = useStore((s) => s.squares[s.selectedSquare]);
   const selectSquare = useStore((s) => s.selectSquare);
   const isInvalid = useStore((s) => {
@@ -24,7 +25,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectSquare(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-base font-extralight md:text-2xl",
+        "relative size-fit cursor-pointer text-base font-extralight transition-colors md:text-2xl",
         {
           "border-r border-r-gray-400": s.col === "3" || s.col === "6",
           "border-l border-l-gray-400": s.col === "4" || s.col === "7",
@@ -35,6 +36,7 @@ const Cell: React.FC<Props> = ({ id }) => {
           "bg-gray-100": isPeer,
           "bg-sky-100": s.value === selected.value && s.value !== null,
           "text-destructive": isInvalid,
+          "bg-primary text-primary-foreground": isHighlighted,
         },
 
         id === selected.id && {
