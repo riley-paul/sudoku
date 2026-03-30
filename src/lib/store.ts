@@ -186,12 +186,15 @@ const useStore = create<State & Actions>()(
 
       newGame: async () => {
         const response = await fetch("/api/random-puzzle");
-        const puzzleString = await response.text();
+        const data = await response.json();
+
+        const puzzle = parseGrid(data.puzzle);
+        const solution = parseGrid(data.solution);
 
         set((state) => ({
           ...state,
           ...initialState,
-          squares: gridToSquares(parseGrid(puzzleString)),
+          squares: gridToSquares(puzzle, solution),
         }));
       },
     })),

@@ -14,6 +14,7 @@ const makeSquareInfo = (
   row: id[0] as Row,
   col: id[1] as Digit,
   value: null,
+  solution: "1",
   given: false,
   notes: new Set(),
   ...overrides,

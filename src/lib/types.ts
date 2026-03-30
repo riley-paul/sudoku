@@ -6,6 +6,7 @@ export type SquareInfo = {
   col: Digit;
 
   value: Digit | null;
+  solution: Digit;
 
   given: boolean; // pre-filled puzzle cell
   notes: Set<Digit>; // candidate numbers for the cell
