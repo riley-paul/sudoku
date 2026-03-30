@@ -6,7 +6,7 @@ import React from "react";
 
 const DummyBoard: React.FC<{ squares: Squares }> = ({ squares }) => {
   return (
-    <div className="grid grid-cols-[repeat(9,auto)] border-2 border-gray-600">
+    <div className="bg-card grid grid-cols-[repeat(9,auto)] border-2 border-gray-600">
       {SQUARES.map((square) => {
         const s = squares[square];
         return (

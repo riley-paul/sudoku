@@ -4,7 +4,7 @@ import { immer } from "zustand/middleware/immer";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { Squares } from "./types";
-import { gridToSquares } from "./transform";
+import { gridToSquares, squaresToGrid } from "./transform";
 import type { Digit, Square } from "@/sudoku/types";
 import {
   COLS,
@@ -15,8 +15,8 @@ import {
 } from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
 import { parseGrid } from "@/sudoku/parse";
-import { isInvalidMove } from "./helpers";
 import { parseSquares, stringifySquares } from "./persist";
+import { constrain } from "@/sudoku/solve";
 
 enableMapSet();
 
@@ -49,6 +49,7 @@ type State = {
   history: Squares[];
   entryMode: "value" | "note";
   strikes: number;
+  highlightedSquares: Set<Square>;
 };
 
 const initialState: State = {
@@ -57,6 +58,7 @@ const initialState: State = {
   history: [],
   entryMode: "value",
   strikes: 0,
+  highlightedSquares: new Set(),
 };
 
 type Actions = {
@@ -73,6 +75,7 @@ type Actions = {
   undo: () => void;
 
   solve: () => void;
+  autoNotes: () => void;
   newGame: () => Promise<void>;
 };
 
@@ -218,6 +221,20 @@ const useStore = create<State & Actions>()(
           await new Promise((r) => setTimeout(r, 500));
         }
       },
+
+      autoNotes: () =>
+        set((state) => {
+          const grid = squaresToGrid(state.squares);
+          const constrained = constrain(grid);
+
+          SQUARES.forEach((sq) => {
+            const cell = state.squares[sq];
+            if (cell.given || cell.value) return;
+
+            const possibleValues = constrained[sq];
+            state.squares[sq].notes = new Set(possibleValues);
+          });
+        }),
     })),
     {
       name: "sudoku-storage",

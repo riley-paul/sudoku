@@ -10,6 +10,7 @@ import EntryModeToggle from "@/components/controls/entry-mode-toggle";
 
 import Board from "@/components/board";
 import Options from "@/components/options";
+import AutoNoteButton from "../controls/auto-note-button";
 
 const Game: React.FC = () => {
   const strikes = useStore((s) => s.strikes);
@@ -30,6 +31,7 @@ const Game: React.FC = () => {
           <ClearButton />
           <UndoButton />
           <NewGameButton />
+          <AutoNoteButton />
         </section>
       </footer>
       <Options />
