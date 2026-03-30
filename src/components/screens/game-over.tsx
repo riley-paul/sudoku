@@ -34,7 +34,9 @@ const GameOver: React.FC = () => {
           New game
         </Button>
       </EmptyContent>
-      <DummyBoard squares={squares} />
+      <div className="pt-8">
+        <DummyBoard squares={squares} />
+      </div>
     </Empty>
   );
 };

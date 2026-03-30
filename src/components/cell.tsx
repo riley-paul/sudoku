@@ -31,7 +31,7 @@ const Cell: React.FC<Props> = ({ id }) => {
           "border-b border-b-gray-400": s.row === "C" || s.row === "F",
           "border-t border-t-gray-400": s.row === "D" || s.row === "G",
 
-          "text-sky-800": !s.given,
+          "text-sky-700": !s.given,
           "bg-gray-100": isPeer,
           "bg-sky-100": s.value === selected.value && s.value !== null,
           "text-destructive": isInvalid,
@@ -39,7 +39,8 @@ const Cell: React.FC<Props> = ({ id }) => {
 
         id === selected.id && {
           "bg-primary text-primary-foreground": true,
-          "bg-destructive text-white": isInvalid,
+          "bg-destructive text-white":
+            s.value !== s.solution && s.value !== null,
         },
       )}
     >

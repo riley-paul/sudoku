@@ -6,7 +6,13 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import type { Squares } from "./types";
 import { gridToSquares } from "./transform";
 import type { Digit, Square } from "@/sudoku/types";
-import { COLS, EMPTY_PUZZLE_STRING, PEERS, ROWS } from "@/sudoku/const";
+import {
+  COLS,
+  EMPTY_PUZZLE_STRING,
+  PEERS,
+  ROWS,
+  SQUARES,
+} from "@/sudoku/const";
 import { getSquare } from "@/sudoku/utils";
 import { parseGrid } from "@/sudoku/parse";
 import { isInvalidMove } from "./helpers";
@@ -66,6 +72,7 @@ type Actions = {
   addHistory: () => void;
   undo: () => void;
 
+  solve: () => void;
   newGame: () => Promise<void>;
 };
 
@@ -92,7 +99,7 @@ const useStore = create<State & Actions>()(
           if (!cell || cell.given) return state; // don't allow changes to given cells
 
           // add strike if invalid move
-          if (isInvalidMove(state.squares, id, value)) {
+          if (value !== cell.solution) {
             state.strikes += 1;
           }
 
@@ -196,6 +203,20 @@ const useStore = create<State & Actions>()(
           ...initialState,
           squares: gridToSquares(puzzle, solution),
         }));
+      },
+
+      solve: async () => {
+        for (const digit of COLS) {
+          set((state) => {
+            SQUARES.forEach((sq) => {
+              if (state.squares[sq].solution === digit) {
+                state.squares[sq].value = digit;
+              }
+            });
+          });
+
+          await new Promise((r) => setTimeout(r, 500));
+        }
       },
     })),
     {

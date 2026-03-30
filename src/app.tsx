@@ -24,15 +24,10 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const solve = useStore((s) => s.solve);
+
   useHotkey("Mod+Shift+S", () => {
-    const { squares } = useStore.getState();
-    const grid = squaresToGrid(squares);
-    const solution = search(constrain(grid));
-    if (solution) {
-      useStore.setState({ squares: gridToSquares(solution) });
-    } else {
-      toast.error("No solution found");
-    }
+    solve();
   });
 
   return (

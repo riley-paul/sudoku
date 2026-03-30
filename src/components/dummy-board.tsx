@@ -12,19 +12,20 @@ const DummyBoard: React.FC<{ squares: Squares }> = ({ squares }) => {
         return (
           <div
             key={s.id}
-            className={cn({
+            className={cn("text-sm font-light text-gray-500", {
               "border-b border-gray-400": s.row === "C" || s.row == "F",
               "border-r border-gray-400": s.col === "3" || s.col === "6",
+              "text-sky-700": !s.given,
+              "text-destructive": s.value !== s.solution,
             })}
           >
             <div
-              className={cn(
-                "flex size-7 items-center justify-center text-sm text-gray-500",
-                !s.given && "font-medium text-sky-800",
-                s.value &&
-                  isInvalidMove(squares, s.id, s.value) &&
-                  "text-destructive",
-              )}
+              className={cn("flex size-7 items-center justify-center", {
+                "border-b border-b-gray-200":
+                  s.row !== "C" && s.row !== "F" && s.row !== "I",
+                "border-r border-r-gray-200":
+                  s.col !== "3" && s.col !== "6" && s.col !== "9",
+              })}
             >
               {s.value}
             </div>
