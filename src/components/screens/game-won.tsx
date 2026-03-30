@@ -13,11 +13,14 @@ import { RotateCcwIcon, TrophyIcon } from "lucide-react";
 import Confetti from "react-confetti";
 
 import { useIsClient, useWindowSize } from "usehooks-ts";
+import DummyBoard from "../dummy-board";
 
 const GameWon: React.FC = () => {
   const newGame = useStore((s) => s.newGame);
   const isClient = useIsClient();
   const { width, height } = useWindowSize();
+
+  const squares = useStore((s) => s.squares);
 
   return (
     <>
@@ -40,6 +43,7 @@ const GameWon: React.FC = () => {
             New game
           </Button>
         </EmptyContent>
+        <DummyBoard squares={squares} />
       </Empty>
     </>
   );

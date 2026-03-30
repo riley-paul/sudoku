@@ -10,9 +10,12 @@ import {
 import { RotateCcwIcon, SkullIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import useStore from "@/lib/store";
+import DummyBoard from "../dummy-board";
 
 const GameOver: React.FC = () => {
   const newGame = useStore((s) => s.newGame);
+  const squares = useStore((s) => s.squares);
+
   return (
     <Empty>
       <EmptyHeader>
@@ -31,6 +34,7 @@ const GameOver: React.FC = () => {
           New game
         </Button>
       </EmptyContent>
+      <DummyBoard squares={squares} />
     </Empty>
   );
 };

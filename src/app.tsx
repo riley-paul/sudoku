@@ -11,6 +11,8 @@ import GameOver from "@/components/screens/game-over";
 import GameWon from "@/components/screens/game-won";
 import Game from "@/components/screens/game";
 import LoadingScreen from "./components/screens/loading-screen";
+import { Toaster } from "./components/ui/sonner";
+import { toast } from "sonner";
 
 const AppContent: React.FC = () => {
   const strikes = useStore((s) => s.strikes);
@@ -28,6 +30,8 @@ const App: React.FC = () => {
     const solution = search(constrain(grid));
     if (solution) {
       useStore.setState({ squares: gridToSquares(solution) });
+    } else {
+      toast.error("No solution found");
     }
   });
 
@@ -35,6 +39,7 @@ const App: React.FC = () => {
     <TooltipProvider delayDuration={1_000}>
       <AppContent />
       <LoadingScreen />
+      <Toaster />
     </TooltipProvider>
   );
 };
