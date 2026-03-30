@@ -25,7 +25,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectSquare(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-base font-extralight transition-colors md:text-2xl",
+        "relative size-fit cursor-pointer text-xl font-extralight transition-colors md:text-2xl",
         {
           "border-r border-r-gray-400": s.col === "3" || s.col === "6",
           "border-l border-l-gray-400": s.col === "4" || s.col === "7",
@@ -47,12 +47,15 @@ const Cell: React.FC<Props> = ({ id }) => {
       )}
     >
       <div
-        className={cn("flex size-8 items-center justify-center md:size-10", {
-          "border-b border-b-gray-200":
-            s.row !== "C" && s.row !== "F" && s.row !== "I",
-          "border-r border-r-gray-200":
-            s.col !== "3" && s.col !== "6" && s.col !== "9",
-        })}
+        className={cn(
+          "flex size-[min(calc((100vw-2rem)/9),3rem)] items-center justify-center",
+          {
+            "border-b border-b-gray-200":
+              s.row !== "C" && s.row !== "F" && s.row !== "I",
+            "border-r border-r-gray-200":
+              s.col !== "3" && s.col !== "6" && s.col !== "9",
+          },
+        )}
       >
         {s.value ? s.value : <Notes notes={s.notes} />}
       </div>

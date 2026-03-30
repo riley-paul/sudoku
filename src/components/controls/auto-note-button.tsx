@@ -13,7 +13,7 @@ const AutoNoteButton: React.FC = () => {
     <Tooltip>
       <TooltipContent>
         Auto notes
-        <KeyboardShortcut>{formatForDisplay("Mod+Z")}</KeyboardShortcut>
+        {/*<KeyboardShortcut>{formatForDisplay("Mod+Z")}</KeyboardShortcut>*/}
       </TooltipContent>
       <TooltipTrigger>
         <Button variant="ghost" size="icon-lg" onClick={autoNotes}>
