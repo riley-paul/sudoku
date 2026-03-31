@@ -17,7 +17,7 @@ const GameOver: React.FC = () => {
   const squares = useStore((s) => s.squares);
 
   return (
-    <Empty>
+    <Empty className="px-15">
       <EmptyHeader>
         <EmptyMedia className="bg-destructive/10 text-destructive rounded-full p-3">
           <SkullIcon className="size-10" />
@@ -28,15 +28,19 @@ const GameOver: React.FC = () => {
           and try again.
         </EmptyDescription>
       </EmptyHeader>
-      <EmptyContent>
+      <div className="py-4">
+        <DummyBoard squares={squares} />
+      </div>
+      <EmptyContent className="grid sm:grid-cols-2">
+        <Button variant="secondary" onClick={newGame}>
+          <RotateCcwIcon />
+          Retry
+        </Button>
         <Button onClick={newGame}>
           <RotateCcwIcon />
           New game
         </Button>
       </EmptyContent>
-      <div className="pt-8">
-        <DummyBoard squares={squares} />
-      </div>
     </Empty>
   );
 };

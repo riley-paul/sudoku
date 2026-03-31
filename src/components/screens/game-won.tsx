@@ -25,7 +25,7 @@ const GameWon: React.FC = () => {
   return (
     <>
       {isClient && <Confetti width={width} height={height} />}
-      <Empty>
+      <Empty className="px-15">
         <EmptyHeader>
           <EmptyMedia className="rounded-full bg-amber-100 p-3 text-amber-500">
             <TrophyIcon className="size-10" />
@@ -37,15 +37,15 @@ const GameWon: React.FC = () => {
             and challenge yourself again!
           </EmptyDescription>
         </EmptyHeader>
-        <EmptyContent>
+        <div className="py-4">
+          <DummyBoard squares={squares} />
+        </div>
+        <EmptyContent className="grid">
           <Button onClick={newGame}>
             <RotateCcwIcon />
             New game
           </Button>
         </EmptyContent>
-        <div className="pt-8">
-          <DummyBoard squares={squares} />
-        </div>
       </Empty>
     </>
   );
