@@ -29,12 +29,14 @@ const Cell: React.FC<Props> = ({ id }) => {
       {
         "bg-gray-100 dark:bg-gray-800/50": isPeer,
         "text-primary": isUser,
+        "dark:text-gray-400": !isUser,
         "text-destructive": isInvalid,
       },
       isSelected || isHighlighted
         ? {
             "bg-primary text-primary-foreground": true,
             "text-secondary": isUser,
+            "dark:text-gray-200": !isUser,
             "bg-destructive": isInvalid,
           }
         : {
@@ -47,7 +49,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectSquare(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-2xl font-light transition-colors",
+        "relative size-fit cursor-pointer text-3xl font-light transition-colors",
         {
           "border-r border-r-gray-400 dark:border-gray-700":
             s.col === "3" || s.col === "6",

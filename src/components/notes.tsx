@@ -7,7 +7,7 @@ type Props = { notes: Set<Digit> };
 
 const Notes: React.FC<Props> = ({ notes }) => {
   return (
-    <div className="text-[6px] md:text-[9px] font-normal grid h-full w-full grid-cols-3 p-0.5">
+    <div className="text-[9px] sm:text-[11px] font-normal grid h-full w-full grid-cols-3 p-0.5">
       {COLS.map((col) => {
         const isToggled = notes.has(col);
         return (
