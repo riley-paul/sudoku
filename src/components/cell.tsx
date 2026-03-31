@@ -26,17 +26,17 @@ const Cell: React.FC<Props> = ({ id }) => {
       square.value === s.squares[s.selectedSquare].value;
 
     return cn(
-      "dark:text-gray-400",
+      "text-muted-foreground",
       {
         "bg-gray-100 dark:bg-gray-800/50": isPeer,
-        "text-primary!": isUser,
-        "text-destructive!": isInvalid,
+        "text-primary": isUser,
+        "text-destructive": isInvalid,
       },
       isSelected || isHighlighted
         ? {
-            "bg-primary! text-primary-foreground!": true,
-            "text-secondary!": isUser,
-            "bg-destructive!": isInvalid,
+            "bg-primary text-primary-foreground": true,
+            "text-secondary": isUser,
+            "bg-destructive": isInvalid,
           }
         : {
             "bg-sky-100 dark:bg-sky-950": isSameValueAsSelected,

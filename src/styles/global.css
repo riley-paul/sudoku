@@ -51,7 +51,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
   --background: var(--color-gray-50);
   --foreground: var(--color-gray-950);
@@ -65,7 +65,7 @@
   --primary: var(--color-sky-600);
   --primary-foreground: var(--color-sky-50);
 
-  --secondary: var(--color-sky-100);
+  --secondary: var(--color-sky-200);
   --secondary-foreground: var(--color-sky-800);
 
   --muted: var(--color-gray-100);
