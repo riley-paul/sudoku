@@ -3,7 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
-@custom-variant dark (&:is(.dark *));
+/*@custom-variant dark @media (prefers-color-scheme: dark);*/
 
 @theme inline {
   --text-2xs: 0.625rem;
@@ -82,34 +82,38 @@
   --ring: var(--color-sky-600);
 }
 
-.dark {
-  --background: var(--color-gray-950);
-  --foreground: var(--color-gray-100);
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
 
-  --card: var(--color-gray-900);
-  --card-foreground: var(--color-gray-100);
+    --background: var(--color-gray-950);
+    --foreground: var(--color-gray-100);
 
-  --popover: var(--color-gray-900);
-  --popover-foreground: var(--color-gray-100);
+    --card: var(--color-gray-900);
+    --card-foreground: var(--color-gray-100);
 
-  --primary: var(--color-sky-600);
-  --primary-foreground: var(--color-gray-100);
+    --popover: var(--color-gray-900);
+    --popover-foreground: var(--color-gray-100);
 
-  --secondary: var(--color-sky-300);
-  --secondary-foreground: var(--color-gray-100);
+    --primary: var(--color-sky-600);
+    --primary-foreground: var(--color-gray-100);
 
-  --muted: var(--color-gray-800);
-  --muted-foreground: var(--color-gray-400);
+    --secondary: var(--color-sky-300);
+    --secondary-foreground: var(--color-gray-100);
 
-  --accent: var(--color-gray-700);
-  --accent-foreground: var(--color-gray-100);
+    --muted: var(--color-gray-800);
+    --muted-foreground: var(--color-gray-400);
 
-  --destructive: var(--color-red-500);
-  --destructive-foreground: var(--color-gray-100);
+    --accent: var(--color-gray-700);
+    --accent-foreground: var(--color-gray-100);
 
-  --border: var(--color-gray-700);
-  --input: var(--color-gray-800);
-  --ring: var(--color-sky-400);
+    --destructive: var(--color-red-500);
+    --destructive-foreground: var(--color-gray-100);
+
+    --border: var(--color-gray-700);
+    --input: var(--color-gray-800);
+    --ring: var(--color-sky-400);
+  }
 }
 
 @layer base {
