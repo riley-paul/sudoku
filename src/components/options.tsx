@@ -39,7 +39,7 @@ const Option: React.FC<{ val: Digit }> = ({ val }) => {
     <Button
       size="sm"
       variant="outline"
-      className={cn("flex h-auto flex-col gap-0.5 px-0 py-2", {
+      className={cn("flex h-auto flex-col gap-0.5 px-0 py-1 md:py-2", {
         "opacity-0!": remainingValues <= 0,
         "bg-gray-100 hover:bg-gray-200": isNoteMode,
       })}

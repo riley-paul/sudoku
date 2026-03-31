@@ -83,7 +83,7 @@ const Board: React.FC = () => {
   );
 
   return (
-    <div className="bg-card grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">
+    <div className="bg-card dark:border-gray-600 grid w-fit grid-cols-[repeat(9,auto)] border-2 border-gray-600">
       {SQUARES.flat().map((id) => (
         <Cell key={id} id={id} />
       ))}
