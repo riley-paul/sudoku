@@ -25,7 +25,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     <button
       onClick={() => selectSquare(id)}
       className={cn(
-        "relative size-fit cursor-pointer text-xl font-extralight transition-colors md:text-2xl",
+        "relative size-fit cursor-pointer text-2xl font-light transition-colors",
         {
           "border-r border-r-gray-400": s.col === "3" || s.col === "6",
           "border-l border-l-gray-400": s.col === "4" || s.col === "7",
@@ -36,11 +36,14 @@ const Cell: React.FC<Props> = ({ id }) => {
           "bg-gray-100": isPeer,
           "bg-sky-100": s.value === selected.value && s.value !== null,
           "text-destructive": isInvalid,
-          "bg-primary text-primary-foreground": isHighlighted,
+          "bg-primary": isHighlighted,
+          "text-sky-100": isHighlighted && !s.given,
         },
 
         id === selected.id && {
-          "bg-primary text-primary-foreground": true,
+          "bg-primary": true,
+          "text-sky-200": !s.given,
+          "text-primary-foreground": s.given,
           "bg-destructive text-white":
             s.value !== s.solution && s.value !== null,
         },
@@ -48,7 +51,7 @@ const Cell: React.FC<Props> = ({ id }) => {
     >
       <div
         className={cn(
-          "flex size-[min(calc((100vw-2rem)/9),3rem)] items-center justify-center",
+          "flex size-[min(calc((100vw-1.5rem)/9),3rem)] items-center justify-center",
           {
             "border-b border-b-gray-200":
               s.row !== "C" && s.row !== "F" && s.row !== "I",

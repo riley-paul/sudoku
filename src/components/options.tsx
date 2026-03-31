@@ -39,7 +39,7 @@ const Option: React.FC<{ val: Digit }> = ({ val }) => {
     <Button
       size="sm"
       variant="outline"
-      className={cn("flex h-auto flex-col gap-0.5 px-0 py-0.5 md:py-1", {
+      className={cn("flex h-auto flex-col gap-0.5 px-0 py-2", {
         "opacity-0!": remainingValues <= 0,
         "bg-gray-100 hover:bg-gray-200": isNoteMode,
       })}
@@ -47,13 +47,13 @@ const Option: React.FC<{ val: Digit }> = ({ val }) => {
       onClick={handleClick}
     >
       <div
-        className={cn("text-primary text-lg font-light md:text-2xl", {
+        className={cn("text-primary text-3xl font-light", {
           "text-muted-foreground": isNoteMode && valueInNotes,
         })}
       >
         {val}
       </div>
-      <div className="text-muted-foreground text-2xs font-light md:text-xs">
+      <div className="text-muted-foreground text-xs font-light">
         {remainingValues}
       </div>
     </Button>
